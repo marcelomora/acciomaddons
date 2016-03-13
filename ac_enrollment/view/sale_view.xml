@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <!-- Top menu item -->
+    <!--
+        This menu item's purpose is to overwrite another one defined in
+        the base module in order to set new groups.
+    -->
+    <menuitem name="Academic"
+        id="menu_main_enrollment"
+        groups="base.group_sale_salesman,base.group_sale_manager"/>
+
+    <menuitem id="ac_enrollment.menu_enrollment" name="Enrollment" parent="ac_enrollment.menu_main_enrollment" sequence="0"/>
+    <record model="ir.ui.view" id="academic_view_order_form">
+      <field name="name">ac_enrollment.order.form.inherit</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="/form/sheet/notebook/page[@string='Order Lines']/field[@name='order_line']/form/field[@name='name']" position="after">
+          <group name="ac_enrollment_custom" string="Enrollment">
+            <group>
+              <field name="course_id_id" />
+              <field name="standard_id_id" />
+              <field name="batch_id_id" />
+              <field name="subject_id_id" />
+              <field name="hours_id_id" />
+            </group>
+            <group>
+              <field name="course_description" />
+              <field name="standard_description" />
+              <field name="batch_description" />
+              <field name="subject_description" />
+              <field name="hours_description" />
+            </group>
+            <group>
+              <field name="enrollment_repeat" />
+              <field name="credits" />
+              <field name="is_imported" />
+            </group>
+          </group>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</openerp>
+

@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+
+    <record id="search_today_order_from_email" model="ir.ui.view">
+      <field name="name">sale.from.email.today.search</field>
+      <field name="model">sale.from.email</field>
+      <field name="arch" type="xml">
+        <search string="Today emails">
+          <filter string="Today emails"
+                  name="today_emails"
+                  domain="[('create_date','&gt;=',((context_today()).strftime('%%Y-%%m-%%d')))]" />
+        </search>
+      </field>
+    </record>
+
+    <record id="view_order_from_email_form" model="ir.ui.view">
+      <field name="name">sale.from.email.form</field>
+      <field name="model">sale.from.email</field>
+      <field name="arch" type="xml">
+        <form string="Sale Orders" version="7.0">
+          <header>
+          </header>
+          <sheet>
+            <h1><field name="name" /> </h1>
+            <group col="4">
+              <field name="email_from" />
+            </group>
+
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+    <record id="view_order_from_email_tree" model="ir.ui.view">
+      <field name="name">sale.from.email.tree</field>
+      <field name="model">sale.from.email</field>
+      <field name="arch" type="xml">
+        <tree string="Sale Orders">
+          <field name="name" />
+        </tree>
+      </field>
+    </record>
+
+    <!-- Sale Form view -->
+    <record id="sale_order_from_email_act" model="ir.actions.act_window">
+        <field name="name">Sale Order From Email</field>
+        <field name="res_model">sale.from.email</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="order_from_email.view_order_from_email_tree"/>
+        <field name="search_view_id" ref="search_today_order_from_email" />
+        <field name="context">{"search_default_today_emails": 1}</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to set a new sale order from email.
+          </p><p>
+            Sales Orders from email are created mainly by customers who
+            having a xml generation functionality send emails asking for 
+            products.
+          </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sale_order_from_email_main_menu" name="Orders From Email" />
+    <menuitem id="menu_sale_order_from_email" name="Sale Orders" sequence="0" parent="menu_sale_order_from_email_main_menu" />
+    <menuitem action="sale_order_from_email_act" id="menu_sale_order_from_email_act" name="Sale Orders" sequence="0" parent="menu_sale_order_from_email" />
+
+  </data>
+</openerp>
+
