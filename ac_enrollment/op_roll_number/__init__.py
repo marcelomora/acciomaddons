@@ -18,20 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #/#############################################################################
-from osv import osv, fields
+import op_roll_number
 
-class op_subject(osv.osv):
-    _name = 'op.subject'
 
-    _columns = {
-            'name': fields.char(size=128, string='Name', required=True),
-            'code': fields.char(size=256, string='Code', required=True),
-            'course_id': fields.many2one('op.course', string='Course'),
-            'grade_waitage': fields.float(string='Grade Waitage'),
-            'type': fields.selection([('p','Practial'),('t','Theory'),('pt','Both'),('o','Other')], string='Type', required=True),
-            'credits':fields.float('Credits', help='Number of credits by subject'),
-
-    }
-
-op_subject()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

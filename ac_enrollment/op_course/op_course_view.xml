@@ -9,9 +9,11 @@
 				<tree string="Course">
 					<field name="name" />
 					<field name="code" />
-					<field name="section" />
-					<field name="evaluation_type" />
+          <!-- <field name="section" /> -->
+          <!-- <field name="evaluation_type" /> -->
+          <!--
 					<field name="payment_term" />
+          -->
 					<field name="subject_ids" />
 				</tree>
 			</field>
@@ -27,14 +29,29 @@
 						<group colspan="4">
 							<field name="name" />
 							<field name="code" />
- 							<field name="section" />
-							<field name="evaluation_type" />
+              <!-- <field name="section" /> -->
+              <!-- <field name="evaluation_type" /> -->
 						</group>
+            <!--
 						<group colspan="4">
 							<field name="payment_term" />
 						</group>
+            -->
 						<group string="Subjects">
-							<field name="subject_ids" nolabel="1"/>
+							<field name="subject_ids" nolabel="1">
+                <form>
+                  <group>
+                    <group>
+                      <field name="name" />
+                      <field name="code" />
+                      <field name="type" />
+                    </group>
+                    <group>
+                      <field name="credits" />
+                    </group>
+                  </group>
+                </form>
+              </field>
 						</group>
 					</sheet>
 				</form>
@@ -49,12 +66,14 @@
 					<field name="name" />
 					<field name="code" />
 <!-- 					<field name="section" /> -->
-					<field name="evaluation_type" />
+          <!-- <field name="evaluation_type" /> -->
 					<newline />
+          <!--
 					<group expand="0" string="Group By...">
 						<filter string="Evaluation Type" domain="[]"
 							context="{'group_by':'evaluation_type'}" />
 					</group>
+          -->
 				</search>
 			</field>
 		</record>

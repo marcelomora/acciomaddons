@@ -20,18 +20,18 @@
 #/#############################################################################
 from osv import osv, fields
 
-class op_subject(osv.osv):
-    _name = 'op.subject'
+class op_roll_number(osv.osv):
+    _name = 'op.roll.number'
+    _rec_name = 'roll_number'
 
     _columns = {
-            'name': fields.char(size=128, string='Name', required=True),
-            'code': fields.char(size=256, string='Code', required=True),
-            'course_id': fields.many2one('op.course', string='Course'),
-            'grade_waitage': fields.float(string='Grade Waitage'),
-            'type': fields.selection([('p','Practial'),('t','Theory'),('pt','Both'),('o','Other')], string='Type', required=True),
-            'credits':fields.float('Credits', help='Number of credits by subject'),
-
+            'roll_number': fields.char(size=8, string='Roll Number', required=True),
+            'course_id': fields.many2one('op.course', string='Course', required=True),
+            'batch_id': fields.many2one('op.batch', string='Batch', required=True),
+            'standard_id': fields.many2one('op.standard', string='Standard', required=True),
+            'division_id': fields.many2one('op.division', string='Division'),
+            'student_id': fields.many2one('op.student', string='Student', required=True),
     }
 
-op_subject()
+op_roll_number()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

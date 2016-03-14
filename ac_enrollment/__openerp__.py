@@ -19,26 +19,28 @@
 #
 ##############################################################################
 {
-    'name' : '',
+    'name' : 'Enrollment',
     'version' : '0.1',
     'author' : 'Accioma',
-    'category' : '',
+    'category' : 'Educational, Enrollment, Sales',
     'description' : """
-Itscre enrollment
-================================
-Itscre enrollment functionality:
-- Sale order as pre-enrollment with amount total for payment.
-- Integration with external academic software.
-- Integration with banking collection.
+Enrollment Sale
+==============================
+Management of enrollment for student at an educational institute.
     """,
     'website': 'http://www.accioma.com',
     'images' : [],
     'depends' : [
-        'base', 'product', 'sale'
+        'base', 'sale',
     ],
     'data': [
-        'view/product_view.xml',
-        'view/sale_view.xml',
+        'data/ac_enrollment_sequence.xml',
+        'data/product_data.xml',
+        'op_course/op_course_view.xml',
+        'op_standard/op_standard_view.xml',
+        'op_batch/op_batch_view.xml',
+        'view/enrollment_sale_view.xml',
+        'view/student_view.xml',
     ],
     'js': [
     ],

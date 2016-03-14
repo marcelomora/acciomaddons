@@ -29,6 +29,22 @@ class op_batch(osv.osv):
             'start_date': fields.date(string='Start Date', required=True),
             'end_date': fields.date(string='End Date', required=True),
             'course_id': fields.many2one('op.course', string='Course', required=True),
+            'or_en_start_date': fields.date('Ordinary Enrollment Start Date',
+                required=True),
+            'or_en_end_date': fields.date('Ordinary Enrollment End Date',
+                required=True),
+            'ex_en_start_date': fields.date('Extraordinary Enrollment Start Date',
+                required=True),
+            'ex_en_end_date': fields.date('Extraordinary Enrollment End Date',
+                required=True),
+            'or_credit_en_price':fields.float('Ordinary Enrollment Credit Price'),
+            'ex_credit_en_price':fields.float('Extraordinary Enrollment Credit Price'),
+            'or_credit_ta_price':fields.float('Ordinary Tariff Credit Price'),
+            'ex_credit_ta_price':fields.float('Extraordinary Tariff Credit Price'),
+            'second_enrollment_price':fields.float('Second Enrollment Price'),
+            'third_enrollment_price':fields.float('Third Enrollment Price'),
+
+
     }
 
 op_batch()

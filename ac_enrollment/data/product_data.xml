@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data noupdate="1">
+
+    <!--
+    <record id="base.user_demo" model="res.users">
+      <field eval="[(4, ref('base.group_sale_salesman'))]" name="groups_id"/>
+    </record>
+    -->
+
+    <!--
+    Resource: product.category
+    -->
+ 
+    <record id="ac_enrollment_product_category_enrollment" model="product.category">
+      <field name="parent_id" ref="product.product_category_all"/>
+      <field name="name">Productos Matrícula</field>
+    </record>
+    <!--
+    Resource: product.product
+    -->
+
+    <record id="ac_enrollment_product_template_enrollment" model="product.template">
+      <field name="name">Matrícula</field>
+      <field name="categ_id" ref="ac_enrollment_product_category_enrollment"/>
+      <field name="standard_price">20.5</field>
+      <field name="list_price">30.75</field>
+      <field name="type">service</field>
+      <field name="uom_id" ref="product.product_uom_unit"/>
+      <field name="uom_po_id" ref="product.product_uom_unit"/>
+      <field name="description">Matrícula por crédito.</field>
+      <field name="description_sale">Matrícula por crédito.</field>
+    </record>
+    <record id="ac_enrollment_product_enrollment" model="product.product">
+      <field name="product_tmpl_id" ref="ac_enrollment_product_template_enrollment"/>
+    </record>
+    <record id="ac_enrollment_product_template_tariff" model="product.template">
+      <field name="name">Arancel</field>
+      <field name="categ_id" ref="ac_enrollment_product_category_enrollment"/>
+      <field name="standard_price">20.5</field>
+      <field name="list_price">30.75</field>
+      <field name="type">service</field>
+      <field name="uom_id" ref="product.product_uom_unit"/>
+      <field name="uom_po_id" ref="product.product_uom_unit"/>
+      <field name="description">Arancel por crédito.</field>
+      <field name="description_sale">Arancel por crédito.</field>
+    </record>
+    <record id="ac_enrollment_product_tariff" model="product.product">
+      <field name="product_tmpl_id" ref="ac_enrollment_product_template_tariff"/>
+    </record>
+  </data>
+</openerp>

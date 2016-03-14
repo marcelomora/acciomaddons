@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <!-- Top menu item -->
+    <menuitem name="Enrollment"
+        id="ac_enrollment.menu_base_enrollment"
+        groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem id="ac_enrollment.menu_enrollment" name="Enrollment" parent="ac_enrollment.menu_base_enrollment" sequence="9"/>
+
+		<record id="view_ac_enrollment_tree" model="ir.ui.view">
+			<field name="name">ac.enrollment.tree</field>
+			<field name="model">ac_enrollment.sale</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<tree string="Enrollment">
+					<field name="name" />
+				</tree>
+			</field>
+		</record>
+		<record id="view_ac_enrollment_form" model="ir.ui.view">
+			<field name="name">ac.enrollment.form</field>
+			<field name="model">ac_enrollment.sale</field>
+      <!--
+			<field name="context">{'show_address': 1}</field>
+      -->
+			<field name="priority" eval="9" />
+			<field name="arch" type="xml">
+				<form string="Enrollment" version="7.0">
+					<header>
+            <button name="action_enrollment_done" type="object" string="Create SO" states="draft" />
+            <field name="state" widget="statusbar" statusbar_visible="draft,sent,progress,done" statusbar_colors='{"invoice_except":"red","waiting_date":"blue"}'/>
+					</header>
+          <sheet>
+            <h1>
+                <label string="Available Subjects " attrs="{'invisible': [('state','not in',('draft','sent'))]}"/>
+                <label string="Enrollment " attrs="{'invisible': [('state','in',('draft','sent'))]}"/>
+                <field name="name" class="oe_inline" />
+            </h1>
+            <group>
+              <group>
+                <field name="student_id" />
+                <field name="partner_id" domain="[('customer','=',True)]" />
+              </group>
+              <group>
+                <field name="enrollment_date" />
+                <field name="enrollment_time" />
+              </group>
+              <group>
+                <field name="granted" />
+                <field name="granted_id" />
+              </group>
+              <group>
+                <field name="op_course_id" />
+                <field name="op_standard_id" />
+                <field name="op_batch_id" />
+              </group>
+            </group>
+            <notebook>
+              <page string="Enrollment Lines">
+                <field name="ac_enrollment_line_ids" nolabel="1" >
+                  <tree string="Subject Lines" editable="bottom">
+                    <field name="taken" />
+                    <field name="subject_id" on_change="onchange_subject_id(subject_id, parent.op_batch_id, parent.enrollment_time)" />
+                    <field name="credits" /> 
+                    <field name="enrollment_price" />
+                    <field name="tariff_price" />
+                    <field name="repeat_registration" />
+                    <field name="additional_price" />
+                    <field name="amount" />
+                  </tree>
+                </field>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+		<record model="ir.actions.act_window" id="act_open_ac_enrollment_view">
+			<field name="name">Enrollments</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">ac_enrollment.sale</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+		</record>
+
+    <!-- Menu -->
+    <menuitem action="act_open_ac_enrollment_view" id="menu_ac_enrollment" parent="ac_enrollment.menu_enrollment" sequence="20" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem id="ac_enrollment.menu_configuration" name="Configuration" parent="ac_enrollment.menu_base_enrollment" sequence="9"/>
+    <menuitem action="act_open_op_course_view" id="menu_op_course" parent="ac_enrollment.menu_configuration" sequence="10" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem action="act_open_op_standard_view" id="menu_op_standard" parent="ac_enrollment.menu_configuration" sequence="20" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem action="act_open_op_batch_view" id="menu_op_batch" parent="ac_enrollment.menu_configuration" sequence="30" groups="base.group_sale_salesman,base.group_sale_manager"/>
+
+  </data>
+</openerp>
+

@@ -11,7 +11,7 @@
 					<field name="code" />
 					<field name="name" />
 					<field name="payment_term" />
-					<field name="student_ids" />
+          <!-- <field name="student_ids" /> -->
 				</tree>
 			</field>
 		</record>
@@ -30,7 +30,7 @@
 							<field name="sequence" />
 							<field name="payment_term" />
 							<separator string="Students" colspan="4" />
-							<field name="student_ids" colspan="4" nolabel="1" >
+              <!-- <field name="student_ids" colspan="4" nolabel="1" > 
 									<tree>
 										<field name="title" />
 										<field name="name" />
@@ -40,7 +40,7 @@
 										<field name="standard_id" />
 										<field name="batch_id" />
 									</tree>
-								</field>
+								</field> -->
 							<separator string="Division" colspan="4" />
 							<field name="division_ids" colspan="4" nolabel="1" />
 						</group>

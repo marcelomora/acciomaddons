@@ -19,19 +19,23 @@
 #
 #/#############################################################################
 from osv import osv, fields
+import time
 
-class op_subject(osv.osv):
-    _name = 'op.subject'
+class ac_student(osv.osv):
+    _name = 'ac.student'
+    _inherits = {'res.partner':'partner_id'}
 
     _columns = {
-            'name': fields.char(size=128, string='Name', required=True),
-            'code': fields.char(size=256, string='Code', required=True),
-            'course_id': fields.many2one('op.course', string='Course'),
-            'grade_waitage': fields.float(string='Grade Waitage'),
-            'type': fields.selection([('p','Practial'),('t','Theory'),('pt','Both'),('o','Other')], string='Type', required=True),
-            'credits':fields.float('Credits', help='Number of credits by subject'),
+        'partner_id': fields.many2one('res.partner', 'Partner',required=True, ondelete="cascade"),
+        'grant_id':fields.many2one('ac.grant', 'Grant'),
+        'gender': fields.selection([('m','Male'),('f','Female'),('o','Other')], string='Gender', required=True),
+        'birth_date':fields.date("Birth Date"),
+        'batch_id':fields.many2one('op.batch', 'Last Enrollment Batch',
+            help='''The last enrollment batch will be used for calculate the price
+            at the enrollment sale view.
+            ''', required=True),
+
+
 
     }
 
-op_subject()
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
