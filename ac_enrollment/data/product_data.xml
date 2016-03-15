@@ -23,8 +23,8 @@
     <record id="ac_enrollment_product_template_enrollment" model="product.template">
       <field name="name">Matrícula</field>
       <field name="categ_id" ref="ac_enrollment_product_category_enrollment"/>
-      <field name="standard_price">20.5</field>
-      <field name="list_price">30.75</field>
+      <field name="standard_price">3.8</field>
+      <field name="list_price">3.8</field>
       <field name="type">service</field>
       <field name="uom_id" ref="product.product_uom_unit"/>
       <field name="uom_po_id" ref="product.product_uom_unit"/>
@@ -37,8 +37,8 @@
     <record id="ac_enrollment_product_template_tariff" model="product.template">
       <field name="name">Arancel</field>
       <field name="categ_id" ref="ac_enrollment_product_category_enrollment"/>
-      <field name="standard_price">20.5</field>
-      <field name="list_price">30.75</field>
+      <field name="standard_price">38.24</field>
+      <field name="list_price">38.24</field>
       <field name="type">service</field>
       <field name="uom_id" ref="product.product_uom_unit"/>
       <field name="uom_po_id" ref="product.product_uom_unit"/>

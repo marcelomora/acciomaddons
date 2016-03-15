@@ -92,12 +92,14 @@
 						<field name="photo" widget="image" class="oe_left oe_avatar" />
             -->
 						<div class="oe_title">
+              <!--
 							<h1>
 								<field name="title" placeholder="Title" style="width: 30%%" />
 							</h1>
+              -->
 							<h1><table>
 								<tr>
-								<td><field name="name" placeholder="First Name" style="padding-right:10px" /></td>
+								<td><field name="name" placeholder="Full Name" style="padding-right:10px" /></td>
                 <!--
 								<td><field name="middle_name" placeholder="Middle Name" style="padding-right:10px" /></td>
 								<td><field name="last_name" placeholder="Last Name" style="padding-right:10px" /></td>

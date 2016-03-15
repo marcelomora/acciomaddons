@@ -27,10 +27,44 @@ from openerp.tools.translate import _
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 import openerp.addons.decimal_precision as dp
 from openerp import workflow
+import pdb
 
 class enrollment_sale(osv.Model):
     _name = "ac_enrollment.sale"
     _description = "Enrollment"
+
+    def _enrollment_amount(self, cr, uid, ids, field, arg, context=None):
+        res = {}
+        for enrollment in self.browse(cr, uid, ids, context=context):
+            res[enrollment.id] = sum([line.credits * line.enrollment_price
+                for line in enrollment.ac_enrollment_line_ids if line.taken])
+
+        return res
+
+    def _tariff_amount(self, cr, uid, ids, field, arg, context=None):
+        res = {}
+        for enrollment in self.browse(cr, uid, ids, context=context):
+            res[enrollment.id] = sum([line.credits * line.tariff_price
+                for line in enrollment.ac_enrollment_line_ids if line.taken])
+
+        return res
+
+
+    def _additional_amount(self, cr, uid, ids, field, arg, context=None):
+        res = {}
+        for enrollment in self.browse(cr, uid, ids, context=context):
+            res[enrollment.id] = sum([line.additional_price
+                for line in enrollment.ac_enrollment_line_ids if line.taken])
+
+        return res
+
+    def _total_amount(self, cr, uid, ids, field, arg, context=None):
+        res = {}
+        for enrollment in self.browse(cr, uid, ids, context=context):
+            res[enrollment.id] = enrollment.amount_enrollment + \
+                    enrollment.amount_tariff + enrollment.amount_additional
+            return res
+
 
     _columns = {
         'name':fields.char('Name', 50, required=True, readonly=True),
@@ -51,13 +85,27 @@ class enrollment_sale(osv.Model):
         'granted_id':fields.many2one('ac.grant', 'Granted Reference',
             help='Granted Reference'),
         'registration':fields.selection([('ordinary','Ordinary'),
-            ('extraordinay', 'Extraordinary')],
+            ('extraordinay', 'Extraordinary')], 'Registration',
             help='Registration type regarding to date'),
         'op_course_id':fields.many2one('op.course', 'Course'),
         'op_standard_id':fields.many2one('op.standard', 'Standard'),
         'op_batch_id':fields.many2one('op.batch', 'Batch'),
         'ac_enrollment_line_ids':fields.one2many('ac_enrollment.sale_line',
             'enrollment_sale_id', 'Lines'),
+        'amount_enrollment':fields.function(_enrollment_amount, method=True,
+            store=False, fnct_inv=None, fnct_search=None, string='Enrollment',
+            help='''Enrollment amount'''),
+        'amount_tariff':fields.function(_tariff_amount, method=True,
+            store=False, fnct_inv=None, fnct_search=None, string='Tariff',
+            help='''Tariff amount'''),
+        'amount_additional':fields.function(_additional_amount, method=True,
+            store=False, fnct_inv=None, fnct_search=None, string='Additional',
+            help='''Tariff amount'''),
+        'amount_total':fields.function(_total_amount, method=True,
+            store=False, fnct_inv=None, fnct_search=None, string='Total',
+            help='''Tariff amount'''),
+
+
     }
 
     _defaults = {
@@ -67,18 +115,20 @@ class enrollment_sale(osv.Model):
         'state':'draft',
     }
 
+    def button_dummy(self, cr, uid, ids, context=None):
+        return True
+
+
     def _create_sale_order(self, cr, uid, enrollment):
         sale_order_obj = self.pool.get('sale.order')
         defaults = sale_order_obj.onchange_partner_id(cr, uid, [],
-                enrollment.partner_id.id , context=context)['value']
+                enrollment.partner_id.id)['value']
         defaults['partner_id'] = enrollment.partner_id.id
         customer = enrollment.partner_id
         return sale_order_obj.create(cr, uid, defaults)
 
 
-    def _create_sale_order_line(self, cr, uid, sale_order_id,
-            product_default_code, qty):
-
+    def _create_sale_order_line(self, cr, uid, sale_order_id, enrollment):
         sale_order_obj = self.pool.get('sale.order')
         product_obj = self.pool.get('product.product')
         sale_order_line = self.pool.get('sale.order.line')
@@ -86,21 +136,32 @@ class enrollment_sale(osv.Model):
         sale_order = sale_order_obj.browse(cr, uid, sale_order_id)
 
         pricelist = sale_order.pricelist_id
+        pdb.set_trace()
+        products = []
         try:
-            product_id = product_obj.search(cr, uid, [
-                ('default_code', '=', product_default_code)])[0]
+            products.append( (self.pool.get('ir.model.data').\
+                    get_object_reference(cr, uid, 'ac_enrollment',\
+                            'ac_enrollment_product_enrollment')[1],\
+                            enrollment.amount_enrollment) )
+            products.append( (self.pool.get('ir.model.data').\
+                    get_object_reference(cr, uid, 'ac_enrollment',\
+                            'ac_enrollment_product_tariff')[1],\
+                            enrollment.amount_tariff) )
         except:
             return False
 
-        defaults = sale_order_line.product_id_change(cr, uid, [], pricelist.id,
-                product_id, qty=qty,
-                date_order=fields.date.context_today(self, cr, uid),
-                partner_id=sale_order.partner_id.id)['value']
+        for product in products:
+            defaults = sale_order_line.product_id_change(cr, uid, [], pricelist.id,
+                    product[0], qty=1,
+                    date_order=fields.date.context_today(self, cr, uid),
+                    partner_id=sale_order.partner_id.id)['value']
 
-        defaults.update({'order_id':sale_order.id, 'product_id':product_id,
-            'product_uom_qty':qty})
+            defaults.update({'order_id':sale_order.id, 'product_id':product[0],
+                'product_uom_qty':1, 'price_unit':product[1]})
 
-        return sale_order_line.create(cr, uid, defaults)
+            sale_order_line.create(cr, uid, defaults)
+
+        return True
 
 
     def action_enrollment_done(self, cr, uid, ids, context=None):
@@ -108,8 +169,9 @@ class enrollment_sale(osv.Model):
 
         for enrollment in self.browse(cr, uid, ids, context=context):
             order_id = self._create_sale_order(cr, uid, enrollment)
+            self._create_sale_order_line(cr, uid, order_id, enrollment )
 
-            enrollment.write({'state':'confirmed'})
+            #enrollment.write({'state':'confirmed'})
 
         return res
 
@@ -144,7 +206,7 @@ class enrollment_sale_line(osv.Model):
         'repeat_registration':fields.selection([
             ('first', 'First Registration'),
             ('second', 'Second Registration'),
-            ('third', 'Third Registration')],
+            ('third', 'Third Registration')], 'Repeated Registration',
             help='Number of repeated registrations'),
         'additional_price':fields.float('Additional Price'),
         'amount':fields.function(_get_amount, method=True, store=False,
