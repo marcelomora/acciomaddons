@@ -60,11 +60,11 @@
                 <field name="ac_enrollment_line_ids" nolabel="1" >
                   <tree string="Subject Lines" editable="bottom">
                     <field name="taken" />
-                    <field name="subject_id" on_change="onchange_subject_id(subject_id, parent.op_batch_id, parent.enrollment_time)" />
+                    <field name="subject_id" on_change="onchange_subject_id( parent.student_id, subject_id, parent.op_batch_id, parent.enrollment_time)" />
                     <field name="credits" /> 
                     <field name="enrollment_price" />
                     <field name="tariff_price" />
-                    <field name="repeat_registration" />
+                    <field name="repeat_registration" on_change="onchange_repeat_registration( parent.student_id, subject_id, parent.op_batch_id, repeat_registration)"/>
                     <field name="additional_price" />
                     <field name="amount" />
                   </tree>

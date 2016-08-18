@@ -69,11 +69,12 @@ class enrollment_sale(osv.Model):
     _columns = {
         'name':fields.char('Name', 50, required=True, readonly=True),
         'student_id':fields.many2one('ac.student', 'Student', required=True),
-        'partner_id':fields.many2one('res.partner', 'Partner'),
+        'partner_id':fields.many2one('res.partner', 'Partner', required=True),
  #       'op_standard_id':fields.many2one('op.standard', 'Standard', required=True),
         'enrollment_date':fields.date('Enrollment Date', required=True),
         'enrollment_time':fields.selection([('ordinary', 'Ordinary'),
-            ('extraordinay', 'Extraordinary')], string="Enrollment Time"),
+            ('extraordinay', 'Extraordinary')], string="Enrollment Time",
+            required=True),
         'state':fields.selection([('draft','Draft Enrollment'),
             ('confirmed', 'Confirmed Enrollment'),
             ('paid', 'Paid'),('done', 'Done')], help='fields help'),
@@ -85,11 +86,11 @@ class enrollment_sale(osv.Model):
         'granted_id':fields.many2one('ac.grant', 'Granted Reference',
             help='Granted Reference'),
         'registration':fields.selection([('ordinary','Ordinary'),
-            ('extraordinay', 'Extraordinary')], 'Registration',
+            ('extraordinay', 'Extraordinary')], 'Registration', required=True,
             help='Registration type regarding to date'),
-        'op_course_id':fields.many2one('op.course', 'Course'),
-        'op_standard_id':fields.many2one('op.standard', 'Standard'),
-        'op_batch_id':fields.many2one('op.batch', 'Batch'),
+        'op_course_id':fields.many2one('op.course', 'Course', required=True),
+        'op_standard_id':fields.many2one('op.standard', 'Standard', required=True),
+        'op_batch_id':fields.many2one('op.batch', 'Batch', required=True),
         'ac_enrollment_line_ids':fields.one2many('ac_enrollment.sale_line',
             'enrollment_sale_id', 'Lines'),
         'amount_enrollment':fields.function(_enrollment_amount, method=True,
@@ -187,7 +188,8 @@ class enrollment_sale_line(osv.Model):
         for line in self.browse(cr, uid, ids, context):
             if line.credits and line.enrollment_price and line.tariff_price:
                 res[line.id] = (line.credits * line.enrollment_price) +\
-                          (line.credits * line.tariff_price)
+                          (line.credits * line.tariff_price) +\
+                          line.additional_price
 
             else:
                 res[line.id] = 0.0
@@ -200,22 +202,31 @@ class enrollment_sale_line(osv.Model):
         'name':fields.char('Description', 255),
         'taken':fields.boolean('Taken'),
         'subject_id':fields.many2one('op.subject', 'Subject'),
-        'credits':fields.float('Credits'),
-        'enrollment_price':fields.float('Enrollment Price'),
-        'tariff_price':fields.float('Tariff Price'),
+        'credits':fields.float('Credits', readonly=False),
+        'enrollment_price':fields.float('Enrollment Price', readonly=False),
+        'tariff_price':fields.float('Tariff Price', readonly=False),
         'repeat_registration':fields.selection([
             ('first', 'First Registration'),
             ('second', 'Second Registration'),
             ('third', 'Third Registration')], 'Repeated Registration',
             help='Number of repeated registrations'),
-        'additional_price':fields.float('Additional Price'),
+        'additional_price':fields.float('Additional Price', readonly=False),
         'amount':fields.function(_get_amount, method=True, store=False,
             fnct_inv=None, fnct_search=None, string='Amount', type='float'),
     }
 
-    def onchange_subject_id(self, cr, uid, ids, subject_id, batch_id, enrollment_time, context=None):
+    _defaults = {
+        'repeat_registration':'first',
+        'taken': True,
+    }
+
+    def onchange_subject_id(self, cr, uid, ids, student_id, subject_id, batch_id, enrollment_time, context=None):
+        if not student_id:
+            raise osv.osv_except(('Error'), ('You must select an student first'))
+        student = self.pool.get('ac.student').browse(cr, uid, student_id, context=context)
         subject = self.pool.get('op.subject').browse(cr, uid, subject_id, context)
-        batch = self.pool.get('op.batch').browse(cr, uid, batch_id, context)
+        _batch_id = student.batch_id and student.batch_id.id or batch_id
+        batch = self.pool.get('op.batch').browse(cr, uid, _batch_id, context)
         res = {'value':{'credits': subject.credits, 'enrollment_price': 0.0,
             'tariff_price': 0.0}}
         if enrollment_time == 'ordinary':
@@ -227,4 +238,19 @@ class enrollment_sale_line(osv.Model):
 
         return res
 
+    def onchange_repeat_registration(self, cr, uid, ids, student_id,
+            subject_id, batch_id, registration_number, context=None):
+        if not student_id:
+            raise osv.osv_except(('Error'), ('You must select an student first'))
+        student = self.pool.get('ac.student').browse(cr, uid, student_id, context=context)
+        subject = self.pool.get('op.subject').browse(cr, uid, subject_id, context)
+        _batch_id = student.batch_id and student.batch_id.id or batch_id
+        batch = self.pool.get('op.batch').browse(cr, uid, _batch_id, context)
+        res = {'value':{'additional_price': 0.0 }}
+        if registration_number == 'second':
+            res['value']['additional_price'] = batch.second_enrollment_price
+        elif registration_number == 'third':
+            res['value']['additional_price'] = batch.third_enrollment_price
+
+        return res
 

@@ -1,0 +1,675 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* ac_enrollment
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-18 17:18+0000\n"
+"PO-Revision-Date: 2016-08-18 17:18+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ac_enrollment
+#: field:op.batch,or_en_start_date:0
+msgid "Ordinary Enrollment Start Date"
+msgstr "Fecha Inicio Matrícula Ordinaria"
+
+#. module: ac_enrollment
+#: field:op.batch,or_credit_ta_price:0
+msgid "Ordinary Tariff Credit Price"
+msgstr "Precio Arancel"
+
+#. module: ac_enrollment
+#: view:op.batch:0
+#: view:op.standard:0
+msgid "Group By..."
+msgstr "Agrupar Por..."
+
+#. module: ac_enrollment
+#: model:ir.model,name:ac_enrollment.model_op_standard
+msgid "op.standard"
+msgstr "Nivel (Semestre, Año)"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale_line,taken:0
+msgid "Taken"
+msgstr "Tomado"
+
+#. module: ac_enrollment
+#: selection:ac_enrollment.sale,enrollment_time:0
+#: selection:ac_enrollment.sale,registration:0
+msgid "Ordinary"
+msgstr "Ordinario"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Create SO"
+msgstr "Crear Prefactura"
+
+#. module: ac_enrollment
+#: field:op.batch,second_enrollment_price:0
+msgid "Second Enrollment Price"
+msgstr "Precio Segunda Matrícula"
+
+#. module: ac_enrollment
+#: selection:op.subject,type:0
+msgid "Practial"
+msgstr "Práctica"
+
+#. module: ac_enrollment
+#: selection:op.subject,type:0
+msgid "Theory"
+msgstr "Teoría"
+
+#. module: ac_enrollment
+#: selection:ac_enrollment.sale,enrollment_time:0
+#: selection:ac_enrollment.sale,registration:0
+msgid "Extraordinary"
+msgstr "Extraordinario"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,op_standard_id:0
+#: model:ir.actions.act_window,name:ac_enrollment.act_open_op_standard_view
+#: model:ir.ui.menu,name:ac_enrollment.menu_op_standard
+#: view:op.standard:0
+msgid "Standard"
+msgstr "Nivel (Semestre, Año)"
+
+#. module: ac_enrollment
+#: model:ir.model,name:ac_enrollment.model_ac_grant
+msgid "ac.grant"
+msgstr "Beca"
+
+#. module: ac_enrollment
+#: selection:op.subject,type:0
+msgid "Both"
+msgstr "Ambos"
+
+#. module: ac_enrollment
+#: model:product.template,description_sale:ac_enrollment.ac_enrollment_product_enrollment_product_template
+#: model:product.template,description_sale:ac_enrollment.ac_enrollment_product_template_enrollment
+msgid "Matrícula por crédito."
+msgstr "Matrícula por crédito."
+
+#. module: ac_enrollment
+#: view:op.batch:0
+msgid "Ordinary Enrollment"
+msgstr "Matrícula Ordinaria"
+
+#. module: ac_enrollment
+#: field:op.batch,ex_en_end_date:0
+msgid "Extraordinary Enrollment End Date"
+msgstr "Fecha Fin Matrícula Extraordinaria"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,op_batch_id:0
+#: model:ir.actions.act_window,name:ac_enrollment.act_open_op_batch_view
+#: model:ir.ui.menu,name:ac_enrollment.menu_op_batch
+#: view:op.batch:0
+msgid "Batch"
+msgstr "Período"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale_line,amount:0
+msgid "Amount"
+msgstr "Monto"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale_line,tariff_price:0
+msgid "Tariff Price"
+msgstr "Precio Arancel"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale_line,repeat_registration:0
+msgid "Repeated Registration"
+msgstr "Matrícula Repetida"
+
+#. module: ac_enrollment
+#: field:ac.student,batch_id:0
+msgid "Last Enrollment Batch"
+msgstr "Última Matrícula"
+
+#. module: ac_enrollment
+#: field:op.batch,ex_en_start_date:0
+msgid "Extraordinary Enrollment Start Date"
+msgstr "Matrícula Extraordinaria Fecha Inicio"
+
+#. module: ac_enrollment
+#: model:res.groups,name:ac_enrollment.ac_academic_user
+msgid "Academic User"
+msgstr "Usuario Académico"
+
+#. module: ac_enrollment
+#: help:ac_enrollment.sale,payment_reference:0
+msgid "Banking deposit or payment reference"
+msgstr "Depósito bancario o referencia de pago"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,op_course_id:0
+#: model:ir.actions.act_window,name:ac_enrollment.act_open_op_course_view
+#: model:ir.ui.menu,name:ac_enrollment.menu_op_course
+#: view:op.batch:0
+#: field:op.batch,course_id:0
+#: view:op.course:0
+#: field:op.standard,course_id:0
+#: field:op.subject,course_id:0
+msgid "Course"
+msgstr "Escuela"
+
+#. module: ac_enrollment
+#: selection:ac.student,gender:0
+msgid "Female"
+msgstr "Femenino"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,registration:0
+msgid "Registration"
+msgstr "Registro / Matrícula"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "(update)"
+msgstr "(actualizar)"
+
+#. module: ac_enrollment
+#: field:ac.student,partner_id:0
+#: field:ac_enrollment.sale,partner_id:0
+msgid "Partner"
+msgstr "Tercero"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Subject Lines"
+msgstr "Materias"
+
+#. module: ac_enrollment
+#: help:ac_enrollment.sale,granted:0
+msgid "Is this enrollment granted?"
+msgstr "¿Becado para esta matrícula?"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale_line,additional_price:0
+msgid "Additional Price"
+msgstr "Costo Adicional"
+
+#. module: ac_enrollment
+#: view:op.batch:0
+#: field:op.batch,end_date:0
+msgid "End Date"
+msgstr "Fecha Fin"
+
+#. module: ac_enrollment
+#: model:ir.model,name:ac_enrollment.model_ac_student
+msgid "ac.student"
+msgstr "Estudiante"
+
+#. module: ac_enrollment
+#: model:ir.model,name:ac_enrollment.model_op_subject
+msgid "op.subject"
+msgstr "Materia"
+
+#. module: ac_enrollment
+#: field:op.subject,type:0
+msgid "Type"
+msgstr "Tipo"
+
+#. module: ac_enrollment
+#: view:ac.student:0
+msgid "Basic Information"
+msgstr "Información Básica"
+
+#. module: ac_enrollment
+#: help:ac_enrollment.sale,amount_enrollment:0
+msgid "Enrollment amount"
+msgstr "Total Matrícula"
+
+#. module: ac_enrollment
+#: view:op.course:0
+msgid "Accounting"
+msgstr "Contabilidad"
+
+#. module: ac_enrollment
+#: selection:ac_enrollment.sale,state:0
+msgid "Draft Enrollment"
+msgstr "Matrícula Borrador"
+
+#. module: ac_enrollment
+#: selection:ac_enrollment.sale_line,repeat_registration:0
+msgid "Second Registration"
+msgstr "Segunda Matrícula"
+
+#. module: ac_enrollment
+#: model:ir.ui.menu,name:ac_enrollment.menu_configuration
+msgid "Configuration"
+msgstr "Configuración"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,amount_tariff:0
+msgid "Tariff"
+msgstr "Arancel"
+
+#. module: ac_enrollment
+#: help:ac_enrollment.sale,state:0
+msgid "fields help"
+msgstr "Ayuda"
+
+#. module: ac_enrollment
+#: field:op.batch,ex_credit_en_price:0
+msgid "Extraordinary Enrollment Credit Price"
+msgstr "Crédito Matrícula Extraordinaria"
+
+#. module: ac_enrollment
+#: field:op.course,tariff_product_id:0
+msgid "Tariff Product"
+msgstr "Producto Arancel"
+
+#. module: ac_enrollment
+#: field:op.standard,sequence:0
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: ac_enrollment
+#: selection:ac.student,gender:0
+msgid "Male"
+msgstr "Masculino"
+
+#. module: ac_enrollment
+#: view:ac.student:0
+msgid "Full Name"
+msgstr "Nombre Completo"
+
+#. module: ac_enrollment
+#: help:ac.student,batch_id:0
+msgid "The last enrollment batch will be used for calculate the price\n"
+"            at the enrollment sale view.\n"
+"            "
+msgstr "El último semestre matriculado será usado para calcular el precio\n"
+"            en la pantalla de matriculación.\n"
+"            "
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,granted_id:0
+#: help:ac_enrollment.sale,granted_id:0
+msgid "Granted Reference"
+msgstr "Referencia Beca"
+
+#. module: ac_enrollment
+#: model:ir.module.category,description:ac_enrollment.module_category_ac_academic
+msgid "Accioma Academic Application"
+msgstr "Aplicación Académica de Accioma"
+
+#. module: ac_enrollment
+#: model:res.groups,name:ac_enrollment.ac_academic_enrollment_user
+msgid "Academic Enrollment User"
+msgstr "Usuario de Matriculación Académico"
+
+#. module: ac_enrollment
+#: view:op.batch:0
+#: field:op.batch,start_date:0
+msgid "Start Date"
+msgstr "Fecha Inicio"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale_line,subject_id:0
+msgid "Subject"
+msgstr "Materia"
+
+#. module: ac_enrollment
+#: model:res.groups,comment:ac_enrollment.ac_academic_user
+msgid "Academic User Permission Group."
+msgstr "Grupo de Permisos Usuario Académico."
+
+#. module: ac_enrollment
+#: field:op.batch,or_credit_en_price:0
+msgid "Ordinary Enrollment Credit Price"
+msgstr "Precio por Crédito Matrícula Ordinaria"
+
+#. module: ac_enrollment
+#: model:product.template,name:ac_enrollment.ac_enrollment_product_enrollment_product_template
+#: model:product.template,name:ac_enrollment.ac_enrollment_product_template_enrollment
+msgid "Matrícula"
+msgstr "Matrícula"
+
+#. module: ac_enrollment
+#: view:op.course:0
+msgid "Subjects"
+msgstr "Materias"
+
+#. module: ac_enrollment
+#: model:product.template,description_sale:ac_enrollment.ac_enrollment_product_tariff_product_template
+#: model:product.template,description_sale:ac_enrollment.ac_enrollment_product_template_tariff
+msgid "Arancel por crédito."
+msgstr "Arancel por crédito."
+
+#. module: ac_enrollment
+#: model:product.template,name:ac_enrollment.ac_enrollment_product_tariff_product_template
+#: model:product.template,name:ac_enrollment.ac_enrollment_product_template_tariff
+msgid "Arancel"
+msgstr "Arancel"
+
+#. module: ac_enrollment
+#: model:ir.actions.act_window,name:ac_enrollment.act_open_ac_student_view
+#: model:ir.ui.menu,name:ac_enrollment.menu_ac_student
+#: view:op.standard:0
+msgid "Students"
+msgstr "Estudiantes"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,state:0
+msgid "unknown"
+msgstr "desconocido"
+
+#. module: ac_enrollment
+#: field:ac.student,grant_id:0
+msgid "Grant"
+msgstr "Beca"
+
+#. module: ac_enrollment
+#: selection:ac_enrollment.sale,state:0
+msgid "Paid"
+msgstr "Pagado"
+
+#. module: ac_enrollment
+#: view:ac.student:0
+msgid "$('.oe_employee_picture').load(function() {\n"
+"								if($(this).width() > $(this).height()) {\n"
+"								$(this).addClass('oe_employee_picture_wide') } });"
+msgstr "$('.oe_employee_picture').load(function() {\n"
+"								if($(this).width() > $(this).height()) {\n"
+"								$(this).addClass('oe_employee_picture_wide') } });"
+
+#. module: ac_enrollment
+#: model:ir.actions.act_window,name:ac_enrollment.act_open_ac_enrollment_view
+#: model:ir.ui.menu,name:ac_enrollment.menu_ac_enrollment
+msgid "Enrollments"
+msgstr "Matrículas"
+
+#. module: ac_enrollment
+#: field:op.standard,division_ids:0
+msgid "Divisions"
+msgstr "Paralelos"
+
+#. module: ac_enrollment
+#: view:op.batch:0
+msgid "Additional Charges"
+msgstr "Costos Adicionales"
+
+#. module: ac_enrollment
+#: model:ir.model,name:ac_enrollment.model_op_batch
+msgid "op.batch"
+msgstr "Período"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Available Subjects "
+msgstr "Materias Disponibles "
+
+#. module: ac_enrollment
+#: view:op.batch:0
+msgid "Extrardinary Enrollment"
+msgstr "Matrícula Extraordinaria"
+
+#. module: ac_enrollment
+#: model:ir.model,name:ac_enrollment.model_ac_enrollment_sale_line
+msgid "Enrollment Line"
+msgstr "Línea de Matrícula"
+
+#. module: ac_enrollment
+#: model:ir.model,name:ac_enrollment.model_op_course
+msgid "op.course"
+msgstr "Escuela / Facultad"
+
+#. module: ac_enrollment
+#: help:ac_enrollment.sale,amount_additional:0
+#: help:ac_enrollment.sale,amount_tariff:0
+#: help:ac_enrollment.sale,amount_total:0
+msgid "Tariff amount"
+msgstr "Total Arancel"
+
+#. module: ac_enrollment
+#: field:ac.grant,code:0
+#: field:op.batch,code:0
+#: field:op.course,code:0
+#: field:op.division,code:0
+#: field:op.standard,code:0
+#: field:op.subject,code:0
+msgid "Code"
+msgstr "Código"
+
+#. module: ac_enrollment
+#: field:op.subject,grade_waitage:0
+msgid "Grade Waitage"
+msgstr "Ponderación"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Enrollment "
+msgstr "Matrícula "
+
+#. module: ac_enrollment
+#: selection:ac_enrollment.sale,state:0
+msgid "Confirmed Enrollment"
+msgstr "Matrícula Confirmada"
+
+#. module: ac_enrollment
+#: selection:ac.student,gender:0
+#: selection:op.subject,type:0
+msgid "Other"
+msgstr "Otro"
+
+#. module: ac_enrollment
+#: selection:ac_enrollment.sale,state:0
+msgid "Done"
+msgstr "Finalizado"
+
+#. module: ac_enrollment
+#: model:product.category,name:ac_enrollment.ac_enrollment_product_category_enrollment
+msgid "Productos Matrícula"
+msgstr "Productos Matrícula"
+
+#. module: ac_enrollment
+#: field:ac.student,birth_date:0
+msgid "Birth Date"
+msgstr "Fecha de Nacimiento"
+
+#. module: ac_enrollment
+#: selection:ac_enrollment.sale_line,repeat_registration:0
+msgid "Third Registration"
+msgstr "Tercera Matrícula"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,amount_additional:0
+msgid "Additional"
+msgstr "Adicional"
+
+#. module: ac_enrollment
+#: help:ac_enrollment.sale,registration:0
+msgid "Registration type regarding to date"
+msgstr "Tipo de matrícula relacionada a la fecha"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,granted:0
+msgid "Granted"
+msgstr "Becado"
+
+#. module: ac_enrollment
+#: help:ac_enrollment.sale_line,repeat_registration:0
+msgid "Number of repeated registrations"
+msgstr "Número de matrícula repetida"
+
+#. module: ac_enrollment
+#: help:op.subject,credits:0
+msgid "Number of credits by subject"
+msgstr "Número de créditos por materia"
+
+#. module: ac_enrollment
+#: field:op.batch,ex_credit_ta_price:0
+msgid "Extraordinary Tariff Credit Price"
+msgstr "Precio de Arancel Extraordinario"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,payment_reference:0
+msgid "Payment Reference"
+msgstr "Referencia de Pago"
+
+#. module: ac_enrollment
+#: view:op.batch:0
+msgid "Batch Details"
+msgstr "Detalle de Período"
+
+#. module: ac_enrollment
+#: model:product.template,description:ac_enrollment.ac_enrollment_product_tariff_product_template
+#: model:product.template,description:ac_enrollment.ac_enrollment_product_template_tariff
+msgid "Costo por Arancel"
+msgstr "Costo por Arancel"
+
+#. module: ac_enrollment
+#: view:op.standard:0
+msgid "Division"
+msgstr "División"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale_line,name:0
+msgid "Description"
+msgstr "Descripción"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale_line,credits:0
+#: field:op.subject,credits:0
+msgid "Credits"
+msgstr "Créditos"
+
+#. module: ac_enrollment
+#: view:ac.student:0
+#: field:ac_enrollment.sale,student_id:0
+msgid "Student"
+msgstr "Estudiante"
+
+#. module: ac_enrollment
+#: field:op.batch,or_en_end_date:0
+msgid "Ordinary Enrollment End Date"
+msgstr "Fecha Fin Matrícula Extraordinaria"
+
+#. module: ac_enrollment
+#: field:op.course,aditional_product_id:0
+msgid "Aditional Product"
+msgstr "Producto Adicional"
+
+#. module: ac_enrollment
+#: selection:ac_enrollment.sale_line,repeat_registration:0
+msgid "First Registration"
+msgstr "Primera Matrícula"
+
+#. module: ac_enrollment
+#: field:ac.grant,name:0
+#: field:ac_enrollment.sale,name:0
+#: field:op.batch,name:0
+#: field:op.course,name:0
+#: field:op.division,name:0
+#: field:op.standard,name:0
+#: field:op.subject,name:0
+msgid "Name"
+msgstr "Nombre"
+
+#. module: ac_enrollment
+#: field:ac.student,gender:0
+msgid "Gender"
+msgstr "Género"
+
+#. module: ac_enrollment
+#: view:ac.student:0
+#: view:ac_enrollment.sale:0
+#: field:ac_enrollment.sale,amount_enrollment:0
+#: model:ir.model,name:ac_enrollment.model_ac_enrollment_sale
+#: model:ir.ui.menu,name:ac_enrollment.menu_base_enrollment
+#: model:ir.ui.menu,name:ac_enrollment.menu_enrollment
+msgid "Enrollment"
+msgstr "Matrícula"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,ac_enrollment_line_ids:0
+msgid "Lines"
+msgstr "Líneas"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale_line,enrollment_sale_id:0
+msgid "Sale"
+msgstr "Venta"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,enrollment_date:0
+msgid "Enrollment Date"
+msgstr "Fecha Matrícula"
+
+#. module: ac_enrollment
+#: field:op.course,enrollment_product_id:0
+msgid "Enrollment Product"
+msgstr "Producto Matrícula"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale_line,enrollment_price:0
+msgid "Enrollment Price"
+msgstr "Precio Matrícula"
+
+#. module: ac_enrollment
+#: model:ir.module.category,name:ac_enrollment.module_category_ac_academic
+msgid "Academic"
+msgstr "Académico"
+
+#. module: ac_enrollment
+#: model:res.groups,comment:ac_enrollment.ac_academic_enrollment_user
+msgid "Academic Enrollemnt User Permission Group."
+msgstr "Grupo de Permisos de Usuario Académico."
+
+#. module: ac_enrollment
+#: field:op.batch,third_enrollment_price:0
+msgid "Third Enrollment Price"
+msgstr "Precio Tercera Matrícula"
+
+#. module: ac_enrollment
+#: model:product.template,description:ac_enrollment.ac_enrollment_product_enrollment_product_template
+#: model:product.template,description:ac_enrollment.ac_enrollment_product_template_enrollment
+msgid "Costo por matrícula"
+msgstr "Costo por matrícula"
+
+#. module: ac_enrollment
+#: field:op.standard,payment_term:0
+msgid "Payment Term"
+msgstr "Términos de Pago"
+
+#. module: ac_enrollment
+#: view:op.course:0
+msgid "Course Detail"
+msgstr "Detalle de Escuelta / Facultad"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Enrollment Lines"
+msgstr "Líneas de Matrícula"
+
+#. module: ac_enrollment
+#: field:op.course,subject_ids:0
+msgid "Subject(s)"
+msgstr "Materia(s)"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,amount_total:0
+msgid "Total"
+msgstr "Total"
+
+#. module: ac_enrollment
+#: field:ac_enrollment.sale,enrollment_time:0
+msgid "Enrollment Time"
+msgstr "Hora Matrícula"
+
+#. module: ac_enrollment
+#: model:ir.model,name:ac_enrollment.model_op_division
+msgid "op.division"
+msgstr "Paralelo"
+
