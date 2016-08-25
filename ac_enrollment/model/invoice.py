@@ -18,43 +18,16 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-    'name' : 'Enrollment',
-    'version' : '0.1',
-    'author' : 'Accioma',
-    'category' : 'Educational, Enrollment, Sales',
-    'description' : """
-Enrollment Sale
-==============================
-Management of enrollment for student at an educational institute.
-    """,
-    'website': 'http://www.accioma.com',
-    'images' : [],
-    'depends' : [
-        'base', 'sale',
-    ],
-    'data': [
-        'data/ac_enrollment_sequence.xml',
-        'op_course/op_course_view.xml',
-        'op_standard/op_standard_view.xml',
-        'op_batch/op_batch_view.xml',
-        'view/enrollment_sale_view.xml',
-        'view/student_view.xml',
-        'security/groups.xml',
-        'security/ir.model.access.csv',
-    ],
-    'js': [
-    ],
-    'qweb' : [
-    ],
-    'css':[
-    ],
-    'demo': [
-    ],
-    'test': [
-    ],
-    'installable': True,
-    'auto_install': False,
-}
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+from openerp.osv import fields, osv
 
+class Invoice(osv.osv):
+    _name = 'account.invoice'
+    _description = 'Invoice'
+    _columns = {
+    	'enrollment_id': fields.many2one(
+    	    'ac_enrollment.sale',
+    	    'Enrollment',
+    	),
+    }
+    _defaults = {
+    }

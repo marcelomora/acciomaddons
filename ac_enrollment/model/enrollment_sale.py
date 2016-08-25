@@ -27,7 +27,7 @@ from openerp.tools.translate import _
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 import openerp.addons.decimal_precision as dp
 from openerp import workflow
-import pdb
+#import pdb
 
 class enrollment_sale(osv.Model):
     _name = "ac_enrollment.sale"
@@ -70,7 +70,6 @@ class enrollment_sale(osv.Model):
         'name':fields.char('Name', 50, required=True, readonly=True),
         'student_id':fields.many2one('ac.student', 'Student', required=True),
         'partner_id':fields.many2one('res.partner', 'Partner', required=True),
- #       'op_standard_id':fields.many2one('op.standard', 'Standard', required=True),
         'enrollment_date':fields.date('Enrollment Date', required=True),
         'enrollment_time':fields.selection([('ordinary', 'Ordinary'),
             ('extraordinay', 'Extraordinary')], string="Enrollment Time",
@@ -105,6 +104,12 @@ class enrollment_sale(osv.Model):
         'amount_total':fields.function(_total_amount, method=True,
             store=False, fnct_inv=None, fnct_search=None, string='Total',
             help='''Tariff amount'''),
+        'sale_order_id': fields.many2one('sale.order', 'Sale Order', 
+            help=""""Referenced sale order to this enrollment"""
+            ),
+        'school_day':fields.selection([('m','Matutino'),
+            ('e', 'Vespertino')], 'Jordada', required=False,
+            help='School day assigned to the student'),
 
 
     }
@@ -125,7 +130,9 @@ class enrollment_sale(osv.Model):
         defaults = sale_order_obj.onchange_partner_id(cr, uid, [],
                 enrollment.partner_id.id)['value']
         defaults['partner_id'] = enrollment.partner_id.id
+        defaults['enrollment_id'] = enrollment.id
         customer = enrollment.partner_id
+
         return sale_order_obj.create(cr, uid, defaults)
 
 
@@ -137,30 +144,18 @@ class enrollment_sale(osv.Model):
         sale_order = sale_order_obj.browse(cr, uid, sale_order_id)
 
         pricelist = sale_order.pricelist_id
-        pdb.set_trace()
         products = []
-        try:
-            products.append( (self.pool.get('ir.model.data').\
-                    get_object_reference(cr, uid, 'ac_enrollment',\
-                            'ac_enrollment_product_enrollment')[1],\
-                            enrollment.amount_enrollment) )
-            products.append( (self.pool.get('ir.model.data').\
-                    get_object_reference(cr, uid, 'ac_enrollment',\
-                            'ac_enrollment_product_tariff')[1],\
-                            enrollment.amount_tariff) )
-        except:
-            return False
+        products.append(enrollment.op_course_id.enrollment_product_id)
+        products.append(enrollment.op_course_id.tariff_product_id)
 
         for product in products:
             defaults = sale_order_line.product_id_change(cr, uid, [], pricelist.id,
-                    product[0], qty=1,
+                    product.id, qty=1,
                     date_order=fields.date.context_today(self, cr, uid),
                     partner_id=sale_order.partner_id.id)['value']
 
-            defaults.update({'order_id':sale_order.id, 'product_id':product[0],
-                'product_uom_qty':1, 'price_unit':product[1]})
-
-            sale_order_line.create(cr, uid, defaults)
+            defaults.update({'order_id':sale_order.id, 'product_id':product.id,
+                'product_uom_qty':1, 'price_unit':0.0})
 
         return True
 
@@ -170,13 +165,40 @@ class enrollment_sale(osv.Model):
 
         for enrollment in self.browse(cr, uid, ids, context=context):
             order_id = self._create_sale_order(cr, uid, enrollment)
-            self._create_sale_order_line(cr, uid, order_id, enrollment )
+            sale_order_id = self._create_sale_order_line(cr, uid, order_id, enrollment )
 
-            #enrollment.write({'state':'confirmed'})
+            """
+            Link to sale order
+            """
+
+            enrollment.write({'state':'confirmed', 'sale_order_id': order_id})
 
         return res
 
+    def action_load_subject(self, cr, uid, ids, context=None):
+        """
+        Load subject lines
+        """
+        if not context:
+            context = {}
 
+        line_obj = self.pool.get('ac_enrollment.sale_line')
+        subject_obj = self.pool.get('op.subject')
+
+        for enrollment in self.browse(cr, uid, ids):
+            subject_ids = subject_obj.search(cr, uid, [('standard_id', '=', enrollment.op_standard_id.id)])
+            if subject_ids:
+                line_obj.unlink(cr, uid, [line.id for line in enrollment.ac_enrollment_line_ids], context)
+            for subject in subject_ids:
+                line_id = line_obj.create(cr, uid, {
+                    'enrollment_sale_id': enrollment.id,
+                    'taken': True,
+                    'subject_id': subject,
+                })
+                on_change = line_obj.onchange_subject_id(cr, uid, [line_id], enrollment.student_id.id, 
+                    subject, enrollment.op_batch_id, enrollment.enrollment_time, context=None)
+
+                line_obj.write(cr, uid, line_id, on_change['value'])
 
 class enrollment_sale_line(osv.Model):
     _name = 'ac_enrollment.sale_line'
@@ -222,7 +244,7 @@ class enrollment_sale_line(osv.Model):
 
     def onchange_subject_id(self, cr, uid, ids, student_id, subject_id, batch_id, enrollment_time, context=None):
         if not student_id:
-            raise osv.osv_except(('Error'), ('You must select an student first'))
+            raise osv.osv_except(_('Error'), _('You must select an student first'))
         student = self.pool.get('ac.student').browse(cr, uid, student_id, context=context)
         subject = self.pool.get('op.subject').browse(cr, uid, subject_id, context)
         _batch_id = student.batch_id and student.batch_id.id or batch_id

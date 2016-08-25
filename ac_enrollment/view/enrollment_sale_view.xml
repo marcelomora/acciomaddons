@@ -29,6 +29,7 @@
 					<header>
             <button name="action_enrollment_done" type="object" string="Create SO" states="draft" />
             <field name="state" widget="statusbar" statusbar_visible="draft,sent,progress,done" statusbar_colors='{"invoice_except":"red","waiting_date":"blue"}'/>
+            <button name="action_load_subject" states="draft" string="Cargar Materias" type="object" class="oe_highlight"/>
 					</header>
           <sheet>
             <h1>
@@ -44,6 +45,8 @@
               <group>
                 <field name="enrollment_date" />
                 <field name="enrollment_time" />
+                <field name="sale_order_id" readonly="1" attrs="{'invisible': [('state', 'in', ('draft'))]} "/>
+
               </group>
               <group>
                 <field name="granted" />
@@ -53,6 +56,7 @@
                 <field name="op_course_id" />
                 <field name="op_standard_id" />
                 <field name="op_batch_id" />
+                <field name="school_day" required="1"/>
               </group>
             </group>
             <notebook>

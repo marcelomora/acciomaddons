@@ -30,6 +30,7 @@ class op_subject(osv.osv):
             'grade_waitage': fields.float(string='Grade Waitage'),
             'type': fields.selection([('p','Practial'),('t','Theory'),('pt','Both'),('o','Other')], string='Type', required=True),
             'credits':fields.float('Credits', help='Number of credits by subject'),
+            'standard_id': fields.many2one('op.standard', 'Standard', ),
 
     }
 

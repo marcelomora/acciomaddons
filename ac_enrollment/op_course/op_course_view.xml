@@ -48,7 +48,8 @@
 					                      <field name="type" />
 					                    </group>
 					                    <group>
-					                      <field name="credits" />
+					                    	<field name="standard_id" />
+					                      	<field name="credits" />
 					                    </group>
 					                  </group>
 					                </form>

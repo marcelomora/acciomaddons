@@ -25,6 +25,7 @@ import pdb
 import base64
 from lxml import etree
 from StringIO import StringIO
+from . import html2text
 
 class sale_from_email(osv.Model):
     _name = 'sale.from.email'
@@ -72,7 +73,7 @@ class sale_from_email(osv.Model):
 
 
     def _create_sale_order_line(self, cr, uid, sale_order_id,
-            product_default_code, qty):
+            product_default_code, description, qty):
 
         sale_order_obj = self.pool.get('sale.order')
         product_obj = self.pool.get('product.product')
@@ -85,6 +86,7 @@ class sale_from_email(osv.Model):
             product_id = product_obj.search(cr, uid, [
                 ('default_code', '=', product_default_code)])[0]
         except:
+            """Utilizar un producto de error"""
             return False
 
         defaults = sale_order_line.product_id_change(cr, uid, [], pricelist.id,
@@ -95,8 +97,6 @@ class sale_from_email(osv.Model):
         defaults.update({'order_id':sale_order.id, 'product_id':product_id,
             'product_uom_qty':qty})
 
-        print defaults
-
         return sale_order_line.create(cr, uid, defaults)
 
 
@@ -104,6 +104,8 @@ class sale_from_email(osv.Model):
         ir_attachment_obj = self.pool.get('ir.attachment')
         mail_message_obj = self.pool.get('mail.message')
         res_partner_obj = self.pool.get('res.partner')
+        sale_order_obj = self.pool.get('sale.order')
+
         mail_ids = mail_message_obj.search(cr, uid,
                 [('model', '=', 'sale.from.email'),
                  ('res_id', 'in', ids),
@@ -121,11 +123,14 @@ class sale_from_email(osv.Model):
             partner = res_partner_obj.browse(cr, uid, partner_ids,
                     context=context)[0]
 
-            sale_order = self._create_sale_order(cr, uid, partner)
+            sale_order_id = self._create_sale_order(cr, uid, partner )
+
+            sale_order_obj.write(cr, uid, sale_order_id, {'origin':m.subject,
+                'note':html2text.html2text(m.body)})
 
             for a in m.attachment_ids:
                 for k, v in self._parse_attachment(a).items():
-                    self._create_sale_order_line(cr, uid, sale_order, k, int(v))
+                    self._create_sale_order_line(cr, uid, sale_order_id, k, int(v))
 
 
     _defaults = {
