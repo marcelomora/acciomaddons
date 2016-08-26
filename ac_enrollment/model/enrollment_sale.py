@@ -27,7 +27,7 @@ from openerp.tools.translate import _
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 import openerp.addons.decimal_precision as dp
 from openerp import workflow
-#import pdb
+import pdb
 
 class enrollment_sale(osv.Model):
     _name = "ac_enrollment.sale"
@@ -85,7 +85,7 @@ class enrollment_sale(osv.Model):
         'granted_id':fields.many2one('ac.grant', 'Granted Reference',
             help='Granted Reference'),
         'registration':fields.selection([('ordinary','Ordinary'),
-            ('extraordinay', 'Extraordinary')], 'Registration', required=True,
+            ('extraordinay', 'Extraordinary')], 'Registration', required=False,
             help='Registration type regarding to date'),
         'op_course_id':fields.many2one('op.course', 'Course', required=True),
         'op_standard_id':fields.many2one('op.standard', 'Standard', required=True),
@@ -147,6 +147,7 @@ class enrollment_sale(osv.Model):
         products = []
         products.append(enrollment.op_course_id.enrollment_product_id)
         products.append(enrollment.op_course_id.tariff_product_id)
+        products.append(enrollment.op_course_id.aditional_product_id)
 
         for product in products:
             defaults = sale_order_line.product_id_change(cr, uid, [], pricelist.id,
@@ -198,6 +199,9 @@ class enrollment_sale(osv.Model):
                 on_change = line_obj.onchange_subject_id(cr, uid, [line_id], enrollment.student_id.id, 
                     subject, enrollment.op_batch_id, enrollment.enrollment_time, context=None)
 
+                value = on_change['value']
+                value['registration'] = 'ordinary'
+
                 line_obj.write(cr, uid, line_id, on_change['value'])
 
 class enrollment_sale_line(osv.Model):
@@ -242,11 +246,13 @@ class enrollment_sale_line(osv.Model):
         'taken': True,
     }
 
-    def onchange_subject_id(self, cr, uid, ids, student_id, subject_id, batch_id, enrollment_time, context=None):
+    def product_id_change(self, cr, uid, ids, student_id, subject_id, course_id, enrollment_time, context=None):
         if not student_id:
             raise osv.osv_except(_('Error'), _('You must select an student first'))
         student = self.pool.get('ac.student').browse(cr, uid, student_id, context=context)
         subject = self.pool.get('op.subject').browse(cr, uid, subject_id, context)
+        course = self.pool.get('op.course').browse(cr, uid, course_id)
+        """
         _batch_id = student.batch_id and student.batch_id.id or batch_id
         batch = self.pool.get('op.batch').browse(cr, uid, _batch_id, context)
         res = {'value':{'credits': subject.credits, 'enrollment_price': 0.0,
@@ -257,8 +263,51 @@ class enrollment_sale_line(osv.Model):
         elif enrollment_time == 'extraordinay':
             res['value']['enrollment_price'] = batch.ex_credit_en_price
             res['value']['tariff_price'] = batch.ex_credit_ta_price
+        """
 
         return res
+
+    def onchange_subject_id(self, cr, uid, ids, standard_id, subject_id, enrollment_time, context=None):
+        context = context or {}
+        res = {'value':{'credits': subject.credits, 'enrollment_price': 0.0,
+            'tariff_price': 0.0}}
+        warning = {}
+        product_uom_obj = self.pool.get('product.uom')
+        partner_obj = self.pool.get('res.partner')
+        product_obj = self.pool.get('product.product')
+        standard = self.pool.get('op.standard').browse(cr, uid, standard_id, context)
+
+        #product_obj = product_obj.browse(cr, uid, product, context=context_partner)
+        tariff_product = standard.course_id.tariff_product_id
+        enrollment_product = standard.course_id.enrollment_product_id
+        additional_product = standard.course_id.aditional_product_id
+        pricelist = standard.property_product_pricelist
+        """
+        if not pricelist:
+            warn_msg = _('You have to select a pricelist standard in the enrollment form !\n'
+                    'Please set one before choosing a subject.')
+            warning_msgs += _("No Pricelist ! : ") + warn_msg +"\n\n"
+        else:
+            price = self.pool.get('product.pricelist').price_get(cr, uid, [pricelist],
+                    product, qty or 1.0, partner_id, {
+                        'uom': uom or result.get('product_uom'),
+                        'date': date_order,
+                        })[pricelist]
+            if price is False:
+                warn_msg = _("Cannot find a pricelist line matching this product and quantity.\n"
+                        "You have to change either the product, the quantity or the pricelist.")
+
+                warning_msgs += _("No valid pricelist line found ! :") + warn_msg +"\n\n"
+            else:
+                result.update({'price_unit': price})
+        if warning_msgs:
+            warning = {
+                       'title': _('Configuration Error!'),
+                       'message' : warning_msgs
+                    }
+        return {'value': result, 'domain': domain, 'warning': warning}
+        """
+        return {}
 
     def onchange_repeat_registration(self, cr, uid, ids, student_id,
             subject_id, batch_id, registration_number, context=None):

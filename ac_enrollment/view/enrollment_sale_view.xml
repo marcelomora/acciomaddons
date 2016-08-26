@@ -64,7 +64,7 @@
                 <field name="ac_enrollment_line_ids" nolabel="1" >
                   <tree string="Subject Lines" editable="bottom">
                     <field name="taken" />
-                    <field name="subject_id" on_change="onchange_subject_id( parent.student_id, subject_id, parent.op_batch_id, parent.enrollment_time)" />
+                    <field name="subject_id" on_change="onchange_subject_id( parent.op_standard_id, subject_id, parent.enrollment_time)" />
                     <field name="credits" /> 
                     <field name="enrollment_price" />
                     <field name="tariff_price" />
@@ -76,6 +76,7 @@
                 <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
                   <field name="amount_enrollment" widget='monetary' options="{'currency_field': 'currency_id'}"/>
                   <field name="amount_tariff" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                  <field name="amount_additional" widget='monetary' options="{'currency_field': 'currency_id'}"/>
                   <div class="oe_subtotal_footer_separator oe_inline">
                       <label for="amount_total" />
                       <button name="button_dummy"

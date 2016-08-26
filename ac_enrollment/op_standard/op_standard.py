@@ -29,6 +29,7 @@ class op_standard(osv.osv):
             'name': fields.char(size=32, string='Name', required=True),
             'course_id': fields.many2one('op.course', string='Course', required=True),
             'payment_term': fields.many2one('account.payment.term', 'Payment Term'),
+            'property_product_pricelist': fields.many2one('product.pricelist', 'Tarifa', ),
             'sequence':fields.integer('Sequence'),
             'division_ids': fields.many2many('op.division', 'standard_division_rel', 'standard_id', 'division_id', 'Divisions', ),
 #            'student_ids': fields.many2many('op.student', 'op_student_standard_rel', 'op_student_id', 'op_standard_id', string='Student(s)'),
