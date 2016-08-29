@@ -64,7 +64,7 @@
                 <field name="ac_enrollment_line_ids" nolabel="1" >
                   <tree string="Subject Lines" editable="bottom">
                     <field name="taken" />
-                    <field name="subject_id" on_change="onchange_subject_id( parent.op_standard_id, subject_id, parent.enrollment_time)" />
+                    <field name="subject_id" on_change="onchange_subject_id( parent.partner_id, parent.op_standard_id, subject_id, parent.enrollment_time, parent.enrollment_date)" />
                     <field name="credits" /> 
                     <field name="enrollment_price" />
                     <field name="tariff_price" />

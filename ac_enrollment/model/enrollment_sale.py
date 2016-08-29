@@ -267,47 +267,54 @@ class enrollment_sale_line(osv.Model):
 
         return res
 
-    def onchange_subject_id(self, cr, uid, ids, standard_id, subject_id, enrollment_time, context=None):
+    def onchange_subject_id(self, cr, uid, ids, partner_id, standard_id, 
+            subject_id, enrollment_time, date_order, context=None):
         context = context or {}
-        res = {'value':{'credits': subject.credits, 'enrollment_price': 0.0,
-            'tariff_price': 0.0}}
+
+        subject = self.pool.get('op.subject').browse(cr, uid, subject_id, context)
+        result = {'credits': subject.credits}
         warning = {}
+        domain = {}
         product_uom_obj = self.pool.get('product.uom')
         partner_obj = self.pool.get('res.partner')
         product_obj = self.pool.get('product.product')
         standard = self.pool.get('op.standard').browse(cr, uid, standard_id, context)
 
-        #product_obj = product_obj.browse(cr, uid, product, context=context_partner)
-        tariff_product = standard.course_id.tariff_product_id
+        tariff_product =  standard.course_id.tariff_product_id
         enrollment_product = standard.course_id.enrollment_product_id
         additional_product = standard.course_id.aditional_product_id
-        pricelist = standard.property_product_pricelist
-        """
+        if enrollment_time == 'ordinary':
+            pricelist = standard.property_product_pricelist
+        elif enrollment_time == 'extraordinay':
+            pricelist = standard.extra_property_product_pricelist
+
+        products = {'enrollment':enrollment_product, 'tariff': tariff_product,  }
+
+        warning_msgs = ''
+
+
         if not pricelist:
             warn_msg = _('You have to select a pricelist standard in the enrollment form !\n'
                     'Please set one before choosing a subject.')
             warning_msgs += _("No Pricelist ! : ") + warn_msg +"\n\n"
         else:
-            price = self.pool.get('product.pricelist').price_get(cr, uid, [pricelist],
-                    product, qty or 1.0, partner_id, {
-                        'uom': uom or result.get('product_uom'),
-                        'date': date_order,
-                        })[pricelist]
-            if price is False:
-                warn_msg = _("Cannot find a pricelist line matching this product and quantity.\n"
-                        "You have to change either the product, the quantity or the pricelist.")
+            for product_type, product in products.iteritems():
+                price = self.pool.get('product.pricelist').price_get(cr, uid, [pricelist.id], product.id, subject.credits)[pricelist.id]
 
-                warning_msgs += _("No valid pricelist line found ! :") + warn_msg +"\n\n"
-            else:
-                result.update({'price_unit': price})
+                if price is False:
+                    warn_msg = _("Cannot find a pricelist line matching this product and quantity.\n"
+                            "You have to change either the product, the quantity or the pricelist.")
+
+                    warning_msgs += _("No valid pricelist line found ! :") + warn_msg +"\n\n"
+                else:
+                    result.update({'%s_price' % product_type: price})
         if warning_msgs:
             warning = {
                        'title': _('Configuration Error!'),
                        'message' : warning_msgs
                     }
+        print result
         return {'value': result, 'domain': domain, 'warning': warning}
-        """
-        return {}
 
     def onchange_repeat_registration(self, cr, uid, ids, student_id,
             subject_id, batch_id, registration_number, context=None):
