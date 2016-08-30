@@ -186,8 +186,6 @@ class enrollment_sale(osv.Model):
         line_obj = self.pool.get('ac_enrollment.sale_line')
         subject_obj = self.pool.get('op.subject')
 
-        pdb.set_trace()
-
         for enrollment in self.browse(cr, uid, ids):
             subject_ids = subject_obj.search(cr, uid, [('standard_id', '=', enrollment.op_standard_id.id)])
             if subject_ids:
@@ -282,8 +280,6 @@ class enrollment_sale_line(osv.Model):
         partner_obj = self.pool.get('res.partner')
         product_obj = self.pool.get('product.product')
         standard = self.pool.get('op.standard').browse(cr, uid, standard_id, context)
-
-        pdb.set_trace()
 
         tariff_product =  standard.course_id.tariff_product_id
         enrollment_product = standard.course_id.enrollment_product_id
