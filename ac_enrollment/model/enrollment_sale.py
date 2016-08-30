@@ -135,13 +135,13 @@ class enrollment_sale(osv.Model):
 
         return sale_order_obj.create(cr, uid, defaults)
 
-
     def _create_sale_order_line(self, cr, uid, sale_order_id, enrollment):
         sale_order_obj = self.pool.get('sale.order')
         product_obj = self.pool.get('product.product')
         sale_order_line = self.pool.get('sale.order.line')
 
         sale_order = sale_order_obj.browse(cr, uid, sale_order_id)
+        pdb.set_trace()
 
         pricelist = sale_order.pricelist_id
         products = []
@@ -166,7 +166,7 @@ class enrollment_sale(osv.Model):
 
         for enrollment in self.browse(cr, uid, ids, context=context):
             order_id = self._create_sale_order(cr, uid, enrollment)
-            sale_order_id = self._create_sale_order_line(cr, uid, order_id, enrollment )
+            self._create_sale_order_line(cr, uid, order_id, enrollment )
 
             """
             Link to sale order
@@ -317,19 +317,39 @@ class enrollment_sale_line(osv.Model):
         print result
         return {'value': result, 'domain': domain, 'warning': warning}
 
-    def onchange_repeat_registration(self, cr, uid, ids, student_id,
-            subject_id, batch_id, registration_number, context=None):
-        if not student_id:
-            raise osv.osv_except(('Error'), ('You must select an student first'))
-        student = self.pool.get('ac.student').browse(cr, uid, student_id, context=context)
-        subject = self.pool.get('op.subject').browse(cr, uid, subject_id, context)
-        _batch_id = student.batch_id and student.batch_id.id or batch_id
-        batch = self.pool.get('op.batch').browse(cr, uid, _batch_id, context)
-        res = {'value':{'additional_price': 0.0 }}
-        if registration_number == 'second':
-            res['value']['additional_price'] = batch.second_enrollment_price
-        elif registration_number == 'third':
-            res['value']['additional_price'] = batch.third_enrollment_price
+    def onchange_repeat_registration(self, cr, uid, ids, standard_id, repeat_registration, context=None):
+        result = {'additional_price': 0.0 }
+        if repeat_registration == 'first':
+            return {'value': result}
 
-        return res
+        standard = self.pool.get('op.standard').browse(cr, uid, standard_id, context)
+        product = standard.course_id.aditional_product_id
+        pricelist = standard.property_product_pricelist
+        result = {}
+        warning = {}
+        
+        warning_msgs = ''
+
+
+        if not pricelist:
+            warn_msg = _('You have to select a pricelist standard in the enrollment form !\n'
+                    'Please set one before choosing a subject.')
+            warning_msgs += _("No Pricelist ! : ") + warn_msg +"\n\n"
+        else:
+            price = self.pool.get('product.pricelist').price_get(cr, uid, [pricelist.id], product.id, 1.0)[pricelist.id]
+
+            if price is False:
+                warn_msg = _("Cannot find a pricelist line matching this product and quantity.\n"
+                        "You have to change either the product, the quantity or the pricelist.")
+
+                warning_msgs += _("No valid pricelist line found ! :") + warn_msg +"\n\n"
+            else:
+                result.update({'additional_price': price})
+        if warning_msgs:
+            warning = {
+                       'title': _('Configuration Error!'),
+                       'message' : warning_msgs
+                    }
+        return {'value': result, 'warning': warning}
+
 

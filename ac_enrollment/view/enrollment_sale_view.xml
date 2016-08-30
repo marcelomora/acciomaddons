@@ -70,7 +70,7 @@
                     <field name="credits" /> 
                     <field name="enrollment_price" />
                     <field name="tariff_price" />
-                    <field name="repeat_registration" on_change="onchange_repeat_registration( parent.student_id, subject_id, parent.op_batch_id, repeat_registration)"/>
+                    <field name="repeat_registration" on_change="onchange_repeat_registration( parent.op_standard_id, repeat_registration )"/>
                     <field name="additional_price" />
                     <field name="amount" />
                   </tree>
