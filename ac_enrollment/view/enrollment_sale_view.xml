@@ -48,10 +48,12 @@
                 <field name="sale_order_id" readonly="1" attrs="{'invisible': [('state', 'in', ('draft'))]} "/>
 
               </group>
+              <!--
               <group>
                 <field name="granted" />
                 <field name="granted_id" />
               </group>
+              -->
               <group>
                 <field name="op_course_id" />
                 <field name="op_standard_id" />
