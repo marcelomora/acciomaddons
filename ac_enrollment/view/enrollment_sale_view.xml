@@ -14,6 +14,8 @@
 			<field name="arch" type="xml">
 				<tree string="Enrollment">
 					<field name="name" />
+          <field name="student_id" />
+          <field name="state" />
 				</tree>
 			</field>
 		</record>
@@ -48,10 +50,12 @@
                 <field name="sale_order_id" readonly="1" attrs="{'invisible': [('state', 'in', ('draft'))]} "/>
 
               </group>
+              <!--
               <group>
                 <field name="granted" />
                 <field name="granted_id" />
               </group>
+              -->
               <group>
                 <field name="op_course_id" />
                 <field name="op_standard_id" />
@@ -63,14 +67,14 @@
               <page string="Enrollment Lines">
                 <field name="ac_enrollment_line_ids" nolabel="1" >
                   <tree string="Subject Lines" editable="bottom">
-                    <field name="taken" />
-                    <field name="subject_id" on_change="onchange_subject_id( parent.op_standard_id, subject_id, parent.enrollment_time)" />
-                    <field name="credits" /> 
-                    <field name="enrollment_price" />
-                    <field name="tariff_price" />
-                    <field name="repeat_registration" on_change="onchange_repeat_registration( parent.student_id, subject_id, parent.op_batch_id, repeat_registration)"/>
-                    <field name="additional_price" />
-                    <field name="amount" />
+                    <!-- <field name="taken" /> -->
+                    <field name="subject_id" on_change="onchange_subject_id( parent.partner_id, parent.op_standard_id, subject_id, parent.enrollment_time, parent.enrollment_date)" />
+                    <field name="credits" readonly="1" /> 
+                    <field name="enrollment_price" readonly="1" />
+                    <field name="tariff_price" readonly="1" />
+                    <field name="repeat_registration" on_change="onchange_repeat_registration( parent.op_standard_id, repeat_registration )"/>
+                    <field name="additional_price" readonly="1" />
+                    <field name="amount" readonly="1" />
                   </tree>
                 </field>
                 <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">

@@ -25,13 +25,15 @@ class op_standard(osv.osv):
     _order = 'sequence'
 
     _columns = {
-            'code': fields.char(size=8, string='Code', required=True),
-            'name': fields.char(size=32, string='Name', required=True),
-            'course_id': fields.many2one('op.course', string='Course', required=True),
-            'payment_term': fields.many2one('account.payment.term', 'Payment Term'),
-            'property_product_pricelist': fields.many2one('product.pricelist', 'Tarifa', ),
-            'sequence':fields.integer('Sequence'),
-            'division_ids': fields.many2many('op.division', 'standard_division_rel', 'standard_id', 'division_id', 'Divisions', ),
+        'code': fields.char(size=8, string='Code', required=True),
+        'name': fields.char(size=32, string='Name', required=True),
+        'course_id': fields.many2one('op.course', string='Course', required=True),
+        'payment_term': fields.many2one('account.payment.term', 'Payment Term'),
+        'property_product_pricelist': fields.many2one('product.pricelist', 'Tarifa', required=True,),
+        'extra_property_product_pricelist': fields.many2one('product.pricelist', 'Tarifa Extraordinaria', 
+            required=True, help= u""" Tarifa a ser utilizada en matrícula extraordinaria """),
+        'sequence':fields.integer('Sequence'),
+        'division_ids': fields.many2many('op.division', 'standard_division_rel', 'standard_id', 'division_id', 'Divisions', ),
 #            'student_ids': fields.many2many('op.student', 'op_student_standard_rel', 'op_student_id', 'op_standard_id', string='Student(s)'),
 #            'class_ids': fields.many2many('op.gr.setup', 'op_class_setup_rel','op_standard_id', 'op_setup_id' , string='Class'),
     }
