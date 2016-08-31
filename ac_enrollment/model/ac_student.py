@@ -33,9 +33,9 @@ class ac_student(osv.osv):
         'batch_id':fields.many2one('op.batch', 'Last Enrollment Batch',
             help='''The last enrollment batch will be used for calculate the price
             at the enrollment sale view.
-            ''', required=True),
-
-
-
+            ''', required=False),
     }
 
+    _defaults = {
+        'customer': True,
+    }

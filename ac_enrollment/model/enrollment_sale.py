@@ -76,7 +76,7 @@ class enrollment_sale(osv.Model):
             required=True),
         'state':fields.selection([('draft','Draft Enrollment'),
             ('confirmed', 'Confirmed Enrollment'),
-            ('paid', 'Paid'),('done', 'Done')], help='fields help'),
+            ('paid', 'Paid'),('done', 'Done')], string="Estado", help='fields help'),
         'payment_reference':fields.char('Payment Reference', 255,
             help='Banking deposit or payment reference'),
 #        'section':fields.many2one('op.section', 'Section',
@@ -141,22 +141,24 @@ class enrollment_sale(osv.Model):
         sale_order_line = self.pool.get('sale.order.line')
 
         sale_order = sale_order_obj.browse(cr, uid, sale_order_id)
-        pdb.set_trace()
 
         pricelist = sale_order.pricelist_id
         products = []
-        products.append(enrollment.op_course_id.enrollment_product_id)
-        products.append(enrollment.op_course_id.tariff_product_id)
-        products.append(enrollment.op_course_id.aditional_product_id)
+        products.append((enrollment.amount_enrollment, enrollment.op_course_id.enrollment_product_id, u"Matrícula {}".format(enrollment.op_standard_id.name) ))
+        products.append((enrollment.amount_tariff, enrollment.op_course_id.tariff_product_id, u"Créditos {}".format(enrollment.op_standard_id.name) ))
+        if enrollment.amount_additional:
+            products.append((enrollment.amount_additional, enrollment.op_course_id.aditional_product_id, u"Derechos matrícula"))
 
         for product in products:
             defaults = sale_order_line.product_id_change(cr, uid, [], pricelist.id,
-                    product.id, qty=1,
+                    product[1].id, qty=1,
                     date_order=fields.date.context_today(self, cr, uid),
                     partner_id=sale_order.partner_id.id)['value']
 
-            defaults.update({'order_id':sale_order.id, 'product_id':product.id,
-                'product_uom_qty':1, 'price_unit':0.0})
+            defaults.update({'order_id':sale_order.id, 'product_id':product[1].id,
+                'product_uom_qty':1, 'price_unit':product[0], 'name': product[2]})
+
+            sale_order_line.create(cr, uid, defaults)
 
         return True
 
@@ -167,6 +169,11 @@ class enrollment_sale(osv.Model):
         for enrollment in self.browse(cr, uid, ids, context=context):
             order_id = self._create_sale_order(cr, uid, enrollment)
             self._create_sale_order_line(cr, uid, order_id, enrollment )
+
+            sale_order_obj = self.pool.get('sale.order')
+            sale_order_obj.action_button_confirm(cr, uid, [order_id])
+            invoice_id = sale_order_obj.action_invoice_create(cr, uid, [order_id])
+            print invoice_id
 
             """
             Link to sale order

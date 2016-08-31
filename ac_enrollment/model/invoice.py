@@ -21,13 +21,11 @@
 from openerp.osv import fields, osv
 
 class Invoice(osv.osv):
-    _name = 'account.invoice'
+    _inherit = 'account.invoice'
     _description = 'Invoice'
     _columns = {
-    	'enrollment_id': fields.many2one(
-    	    'ac_enrollment.sale',
-    	    'Enrollment',
-    	),
+    	'enrollment_id': fields.many2one('ac_enrollment.sale', 'Enrollment', ),
+        'student_id': fields.many2one('ac.student', 'Estudiante', ),
     }
     _defaults = {
     }
