@@ -173,7 +173,11 @@ class enrollment_sale(osv.Model):
             sale_order_obj = self.pool.get('sale.order')
             sale_order_obj.action_button_confirm(cr, uid, [order_id])
             invoice_id = sale_order_obj.action_invoice_create(cr, uid, [order_id])
-            print invoice_id
+
+            account_invoice_obj = self.pool.get('account.invoice')
+            account_invoice_obj.write(cr, uid, [invoice_id], 
+                {'student_id': enrollment.student_id.id,
+                 'enrollment_id': enrollment.id})
 
             """
             Link to sale order

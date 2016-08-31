@@ -40,6 +40,7 @@ Management of enrollment for student at an educational institute.
         'op_batch/op_batch_view.xml',
         'view/enrollment_sale_view.xml',
         'view/student_view.xml',
+        'view/invoice_view.xml',
         'security/groups.xml',
         'security/ir.model.access.csv',
     ],
