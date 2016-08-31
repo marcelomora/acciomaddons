@@ -32,6 +32,7 @@ import pdb
 class enrollment_sale(osv.Model):
     _name = "ac_enrollment.sale"
     _description = "Enrollment"
+    _inherit = "mail.thread"
 
     def _enrollment_amount(self, cr, uid, ids, field, arg, context=None):
         res = {}
