@@ -71,7 +71,6 @@
 								<field name="op_batch_id" />
 								<field name="school_day" required="1" />
 								<field name="op_course_id"/>
-								<field name="op_standard_id"/>
 								<field name="op_batch_id"/>
 								<field name="school_day" required="1"/>
 							</group>
