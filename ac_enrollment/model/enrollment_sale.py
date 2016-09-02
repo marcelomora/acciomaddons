@@ -125,6 +125,30 @@ class enrollment_sale(osv.Model):
         res['value'].update({'ac_enrollment_line_ids': line_ids})
         return res
     
+    def action_show_invoice(self, cr, uid, ids, context=None):
+        '''        
+        Este método muestra las facturas asociadas a la matricula
+        :param cr: Cursor estándar de base de datos PostgreSQL
+        :param uid: ID del usuario actual
+        :param ids: IDs de matricula
+        :param context: Diccionario de datos de contexto adicional
+        '''
+        if context is None:
+            context = {}
+        invoice_ids = []
+        model_data_obj = self.pool.get('ir.model.data')
+        obj, view_id = model_data_obj.get_object_reference(cr, uid, 'account', 'action_invoice_tree3')
+        result = self.pool.get('ir.actions.act_window').read(cr, uid, [view_id], context=context)[0]
+        for enrollment in self.browse(cr, uid, ids, context=context):
+            invoice_ids.append(enrollment.account_invoice_id.id)       
+        if len(invoice_ids) > 1:
+            result['domain'] = "[('id','in',["+','.join(map(str, invoice_ids))+"])]"
+        else:
+            res = model_data_obj.get_object_reference(cr, uid, 'account', 'invoice_form')
+            result['views'] = [(res and res[1] or False, 'form')]
+            result['res_id'] = invoice_ids and invoice_ids[0] or False
+        return result
+    
     def _enrollment_amount(self, cr, uid, ids, field, arg, context=None):
         res = {}
         for enrollment in self.browse(cr, uid, ids, context=context):
@@ -244,11 +268,13 @@ class enrollment_sale(osv.Model):
         sale_order_obj = self.pool.get('sale.order')
         product_obj = self.pool.get('product.product')
         sale_order_line = self.pool.get('sale.order.line')
+        enrollment_line_obj = self.pool.get('ac_enrollment.sale_line')
 
         sale_order = sale_order_obj.browse(cr, uid, sale_order_id)
 
         pricelist = sale_order.pricelist_id
         products = []
+        lines = []
         products.append((enrollment.amount_enrollment, enrollment.op_course_id.enrollment_product_id, u"Matrícula {}".format(enrollment.op_standard_id.name) ))
         products.append((enrollment.amount_tariff, enrollment.op_course_id.tariff_product_id, u"Créditos {}".format(enrollment.op_standard_id.name) ))
         if enrollment.amount_additional:
@@ -261,10 +287,13 @@ class enrollment_sale(osv.Model):
                     partner_id=sale_order.partner_id.id)['value']
 
             defaults.update({'order_id':sale_order.id, 'product_id':product[1].id,
-                'product_uom_qty':1, 'price_unit':product[0], 'name': product[2]})
+                             'product_uom_qty':1, 'price_unit':product[0], 'name': product[2]})
 
-            sale_order_line.create(cr, uid, defaults)
-
+            order_line_id = sale_order_line.create(cr, uid, defaults)
+                       
+            #Para cada producto de los 3 productos a facturar les agregamos las materias que le afectan
+            for line in enrollment.ac_enrollment_line_ids:
+                line.write({'order_line_ids': [[6,0,[order_line_id]]]})
         return True
 
 
@@ -277,13 +306,11 @@ class enrollment_sale(osv.Model):
             sale_order_obj.action_button_confirm(cr, uid, [order_id])
             invoice_id = sale_order_obj.action_invoice_create(cr, uid, [order_id])
             account_invoice_obj = self.pool.get('account.invoice')
-            account_invoice_obj.write(cr, uid, [invoice_id], 
-                {'student_id': enrollment.student_id.id,
-                 'enrollment_id': enrollment.id})
+            account_invoice_obj.write(cr, uid, [invoice_id], {'student_id': enrollment.student_id.id, 'enrollment_id': enrollment.id})
             """
             Link to sale order and account invoice
             """
-            enrollment.write({'state':'confirmed', 'sale_order_id': order_id, 'account_invoice_id': invoice_id})
+            enrollment.write({'state': 'confirmed', 'sale_order_id': order_id, 'account_invoice_id': invoice_id})
         return res
 
     def action_load_subject(self, cr, uid, ids, context=None):
@@ -350,6 +377,10 @@ class enrollment_sale_line(osv.Model):
         'additional_price':fields.float('Additional Price', readonly=False),
         'amount':fields.function(_get_amount, method=True, store=False,
             fnct_inv=None, fnct_search=None, string='Amount', type='float'),
+        'order_line_ids':fields.many2many('sale.order.line', 'rel_enrollment_line_order_line', 'enrollment_line_id', 'order_line_id', 
+                                          'Order Lines', help=''),
+        'invoice_line_ids':fields.many2many('account.invoice.line', 'rel_enrollment_line_invoice_line', 'enrollment_line_id', 'invoice_line_id', 
+                                          'Invoice Lines', help=''),
     }
 
     _defaults = {
@@ -437,7 +468,6 @@ class enrollment_sale_line(osv.Model):
         
         warning_msgs = ''
 
-
         if not pricelist:
             warn_msg = _('You have to select a pricelist standard in the enrollment form !\n'
                     'Please set one before choosing a subject.')
@@ -458,5 +488,4 @@ class enrollment_sale_line(osv.Model):
                        'message' : warning_msgs
                     }
         return {'value': result, 'warning': warning}
-
-
+    
