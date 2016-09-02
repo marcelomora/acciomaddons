@@ -30,6 +30,7 @@ import openerp.addons.decimal_precision as dp
 from openerp import workflow
 import pdb
 
+
 class enrollment_sale(osv.Model):
     _name = "ac_enrollment.sale"
     _description = "Enrollment"
@@ -65,6 +66,63 @@ class enrollment_sale(osv.Model):
         if student_id:
             student = self.pool.get('ac.student').read(cr, uid, student_id, ['partner_id.id'], context=context)
             res['value'].update(partner_id=student.get('partner_id'))
+        return res
+    
+    def onchange_course_date(self, cr, uid, ids, op_course_id, enrollment_date, context=None):
+        context = context or {}
+        res = {'value': {}, 'domain': {}}
+        domain, op_batch_ids, value = [], [], {}
+        op_batch_obj = self.pool.get('op.batch')
+        if op_course_id and enrollment_date:
+            op_batch_ids = op_batch_obj.search(cr, uid, [('course_id','=',op_course_id),
+                                                         ('or_en_start_date','<=',enrollment_date),
+                                                         ('ex_en_end_date','>=',enrollment_date)], context=context)
+        else:
+            if op_course_id:
+                op_batch_ids = op_batch_obj.search(cr, uid, [('course_id','=',op_course_id)], context=context)
+            else:
+                op_batch_ids = op_batch_obj.search(cr, uid, [('or_en_start_date','<=',enrollment_date),
+                                                             ('ex_en_end_date','>=',enrollment_date)], context=context)
+            for op_batch in op_batch_obj.browse(cr, uid, op_batch_ids, context=context):
+                enrollment_date_datetime = datetime.strptime(enrollment_date or time.strftime("%Y-%m-%d"), "%Y-%m-%d")
+                ordinary_start_date = datetime.strptime(op_batch.or_en_start_date, "%Y-%m-%d")
+                ordinary_end_date = datetime.strptime(op_batch.or_en_end_date, "%Y-%m-%d")
+                if ordinary_start_date <= enrollment_date_datetime and \
+                    enrollment_date_datetime <= ordinary_end_date:
+                    value = {'enrollment_time': 'ordinary'}
+                extraordinary_start_date = datetime.strptime(op_batch.ex_en_start_date, "%Y-%m-%d")
+                extraordinary_end_date = datetime.strptime(op_batch.ex_en_end_date, "%Y-%m-%d")
+                if extraordinary_start_date <= enrollment_date_datetime and \
+                    enrollment_date_datetime <= extraordinary_end_date:
+                    value = {'enrollment_time': 'extraordinary'}
+        res['domain'].update(op_batch_id=[('id','in', op_batch_ids)])
+        res['value'].update(value)
+        return res
+    
+    def onchange_standard_id(self, cr, uid, ids, op_standard_id, 
+                             student_id, enrollment_time, 
+                             enrollment_date, context=None):
+        context = context or {}
+        line_ids = [(5, False, False)]
+        op_standard_obj = self.pool.get('op.standard')
+        line_obj = self.pool.get('ac_enrollment.sale_line')
+        subject_obj = self.pool.get('op.subject')
+        res = {'value': {}}
+        if op_standard_id and op_standard_id[0] and op_standard_id[0][2]:
+            ids = op_standard_id[0][2]
+            for level in ids:
+                subject_ids = subject_obj.search(cr, uid, [('standard_id', '=', level)])
+                for subject in subject_ids:
+                    line_id = [0, 0, {
+                        'taken': True,
+                        'subject_id': subject,
+                    }]
+                    on_change = line_obj.onchange_subject_id(cr, uid, 
+                        [], student_id, level, subject, enrollment_time, 
+                        enrollment_date, context=context)
+                    line_id[2].update(on_change['value'])
+                    line_ids.append(line_id)
+        res['value'].update({'ac_enrollment_line_ids': line_ids})
         return res
     
     def _enrollment_amount(self, cr, uid, ids, field, arg, context=None):
@@ -127,7 +185,9 @@ class enrollment_sale(osv.Model):
             ('extraordinay', 'Extraordinary')], 'Registration', required=False,
             help='Registration type regarding to date'),
         'op_course_id':fields.many2one('op.course', 'Course', required=True),
-        'op_standard_id':fields.many2one('op.standard', 'Standard', required=True),
+        'op_standard_ids':fields.many2many('op.standard', 
+                                          'ac_enrollment_sale_op_standard_rel', 'enrollment_id','op_standard_id',
+                                          'Standard', required=True),
         'op_batch_id':fields.many2one('op.batch', 'Batch', required=True),
         'ac_enrollment_line_ids':fields.one2many('ac_enrollment.sale_line',
             'enrollment_sale_id', 'Lines'),
@@ -167,7 +227,9 @@ class enrollment_sale(osv.Model):
     def button_dummy(self, cr, uid, ids, context=None):
         return True
 
-
+    def write(self, cr, uid, ids, vals, context=None):
+        return super(enrollment_sale, self).write(cr, uid, ids, vals, context=context)
+    
     def _create_sale_order(self, cr, uid, enrollment):
         sale_order_obj = self.pool.get('sale.order')
         defaults = sale_order_obj.onchange_partner_id(cr, uid, [],
@@ -230,28 +292,28 @@ class enrollment_sale(osv.Model):
         """
         if not context:
             context = {}
-
         line_obj = self.pool.get('ac_enrollment.sale_line')
         subject_obj = self.pool.get('op.subject')
 
         for enrollment in self.browse(cr, uid, ids):
-            subject_ids = subject_obj.search(cr, uid, [('standard_id', '=', enrollment.op_standard_id.id)])
-            if subject_ids:
-                line_obj.unlink(cr, uid, [line.id for line in enrollment.ac_enrollment_line_ids], context)
-            for subject in subject_ids:
-                line_id = line_obj.create(cr, uid, {
-                    'enrollment_sale_id': enrollment.id,
-                    'taken': True,
-                    'subject_id': subject,
-                })
-                on_change = line_obj.onchange_subject_id(cr, uid, [line_id], 
-                    enrollment.student_id.id, enrollment.op_standard_id.id, subject, 
-                    enrollment.enrollment_time, enrollment.enrollment_date, context=None)
-
-                value = on_change['value']
-                value['registration'] = 'ordinary'
-
-                line_obj.write(cr, uid, line_id, on_change['value'])
+            for op_standard_id in enrollment.op_standard_ids:
+                subject_ids = subject_obj.search(cr, uid, [('standard_id', '=', op_standard_id.id)])
+                if subject_ids:
+                    line_obj.unlink(cr, uid, [line.id for line in enrollment.ac_enrollment_line_ids], context)
+                for subject in subject_ids:
+                    line_id = line_obj.create(cr, uid, {
+                        'enrollment_sale_id': enrollment.id,
+                        'taken': True,
+                        'subject_id': subject,
+                    })
+                    on_change = line_obj.onchange_subject_id(cr, uid, [line_id], 
+                        enrollment.student_id.id, enrollment.op_standard_id.id, subject, 
+                        enrollment.enrollment_time, enrollment.enrollment_date, context=None)
+    
+                    value = on_change['value']
+                    value['registration'] = 'ordinary'
+    
+                    line_obj.write(cr, uid, line_id, on_change['value'])
 
 class enrollment_sale_line(osv.Model):
     _name = 'ac_enrollment.sale_line'

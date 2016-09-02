@@ -48,7 +48,7 @@
 								<field name="partner_id" domain="[('customer','=',True)]" />
 							</group>
 							<group>
-								<field name="enrollment_date" />
+								<field name="enrollment_date" on_change="onchange_course_date(op_course_id, enrollment_date)" />
 								<field name="enrollment_time" />
 								<field name="sale_order_id" readonly="1"
 									attrs="{'invisible': [('state', 'in', ('draft'))]} " />
@@ -58,8 +58,10 @@
 							<!-- <group> <field name="granted" /> <field name="granted_id" /> 
 								</group> -->
 							<group>
-								<field name="op_course_id" />
-								<field name="op_standard_id" />
+								<field name="op_course_id" on_change="onchange_course_date(op_course_id, enrollment_date)" />
+								<field name="op_standard_ids" widget="many2many_tags" 
+									on_change="onchange_standard_id(op_standard_ids, student_id,
+									enrollment_time, enrollment_date)" />
 								<field name="op_batch_id" />
 								<field name="school_day" required="1" />
 							</group>
