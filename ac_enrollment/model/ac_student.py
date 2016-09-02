@@ -24,7 +24,19 @@ import time
 class ac_student(osv.osv):
     _name = 'ac.student'
     _inherits = {'res.partner':'partner_id'}
-
+    
+    def create(self, cr, uid, data, context=None):
+        context = context or {}
+        existent_partner = []
+        if 'vat' in data:
+            existent_partner = self.pool.get('res.partner').search(cr, uid, [('vat', '=', data.get('vat'))])
+            if existent_partner:
+                data.update(partner_id=existent_partner[0])
+                self.pool.get('res.partner').action_open(cr, uid, existent_partner, context=context)
+        result = super(ac_student, self).create(cr, uid, data, context=context)
+        self.pool.get('res.partner').action_lock(cr, uid, existent_partner, context=context)
+        return  result
+    
     _columns = {
         'partner_id': fields.many2one('res.partner', 'Partner',required=True, ondelete="cascade"),
         'grant_id':fields.many2one('ac.grant', 'Grant'),

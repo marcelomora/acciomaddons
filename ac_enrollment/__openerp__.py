@@ -38,6 +38,7 @@ Management of enrollment for student at an educational institute.
         'op_course/op_course_view.xml',
         'op_standard/op_standard_view.xml',
         'op_batch/op_batch_view.xml',
+        'op_subject/op_subject_view.xml',
         'view/enrollment_sale_view.xml',
         'view/student_view.xml',
         'view/invoice_view.xml',

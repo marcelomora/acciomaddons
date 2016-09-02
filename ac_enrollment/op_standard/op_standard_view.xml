@@ -59,7 +59,8 @@
 			<field name="arch" type="xml">
 				<search string="Standard">
 					<field name="code" />
-					<field name="name" />
+					<field name="name" 
+						filter_domain="['|','|',('name','ilike',self),('code','ilike',self)]" />
 					<newline />
 					<group expand="0" string="Group By...">
 					</group>

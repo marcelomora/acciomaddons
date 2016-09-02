@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-  <data>
-    <!-- Top menu item -->
-    <menuitem name="Enrollment"
-        id="ac_enrollment.menu_base_enrollment"
-        groups="base.group_sale_salesman,base.group_sale_manager"/>
-    <menuitem id="ac_enrollment.menu_enrollment" name="Enrollment" parent="ac_enrollment.menu_base_enrollment" sequence="9"/>
+	<data>
+		<!-- Top menu item -->
+		<menuitem name="Enrollment" id="ac_enrollment.menu_base_enrollment"
+			groups="base.group_sale_salesman,base.group_sale_manager" />
+		<menuitem id="ac_enrollment.menu_enrollment" name="Enrollment"
+			parent="ac_enrollment.menu_base_enrollment" sequence="9" />
 
 		<record id="view_ac_enrollment_tree" model="ir.ui.view">
 			<field name="name">ac.enrollment.tree</field>
@@ -14,92 +14,130 @@
 			<field name="arch" type="xml">
 				<tree string="Enrollment">
 					<field name="name" />
-          <field name="student_id" />
-          <field name="state" />
+					<field name="student_id" />
+					<field name="state" />
 				</tree>
 			</field>
 		</record>
 		<record id="view_ac_enrollment_form" model="ir.ui.view">
 			<field name="name">ac.enrollment.form</field>
 			<field name="model">ac_enrollment.sale</field>
-      <!--
-			<field name="context">{'show_address': 1}</field>
-      -->
+			<!-- <field name="context">{'show_address': 1}</field> -->
 			<field name="priority" eval="9" />
 			<field name="arch" type="xml">
 				<form string="Enrollment" version="7.0">
 					<header>
-            <button name="action_enrollment_done" type="object" string="Create SO" states="draft" />
-            <field name="state" widget="statusbar" statusbar_visible="draft,sent,progress,done" statusbar_colors='{"invoice_except":"red","waiting_date":"blue"}'/>
-            <button name="action_load_subject" states="draft" string="Cargar Materias" type="object" class="oe_highlight"/>
+						<button name="action_enrollment_done" type="object" string="Create SO"
+							states="draft" />
+						<field name="state" widget="statusbar" statusbar_visible="draft,sent,progress,done"
+							statusbar_colors='{"invoice_except":"red","waiting_date":"blue"}' />
+						<button name="action_load_subject" states="draft" string="Cargar Materias"
+							type="object" class="oe_highlight" />
 					</header>
-          <sheet>
-            <h1>
-                <label string="Available Subjects " attrs="{'invisible': [('state','not in',('draft','sent'))]}"/>
-                <label string="Enrollment " attrs="{'invisible': [('state','in',('draft','sent'))]}"/>
-                <field name="name" class="oe_inline" />
-            </h1>
-            <group>
-              <group>
-                <field name="student_id" />
-                <field name="partner_id" domain="[('customer','=',True)]" />
-              </group>
-              <group>
-                <field name="enrollment_date" />
-                <field name="enrollment_time" />
-                <field name="sale_order_id" readonly="1" attrs="{'invisible': [('state', 'in', ('draft'))]} "/>
+					<sheet>
+						<h1>
+							<label string="Available Subjects "
+								attrs="{'invisible': [('state','not in',('draft','sent'))]}" />
+							<label string="Enrollment "
+								attrs="{'invisible': [('state','in',('draft','sent'))]}" />
+							<field name="name" class="oe_inline" />
+						</h1>
+						<group>
+							<group>
+								<field name="student_id" on_change="onchange_student_id(student_id)" />
+								<field name="partner_id" domain="[('customer','=',True)]" />
+							</group>
+							<group>
+								<field name="enrollment_date" />
+								<field name="enrollment_time" />
+								<field name="sale_order_id" readonly="1"
+									attrs="{'invisible': [('state', 'in', ('draft'))]} " />
 
-              </group>
-              <!--
-              <group>
-                <field name="granted" />
-                <field name="granted_id" />
-              </group>
-              -->
-              <group>
-                <field name="op_course_id" />
-                <field name="op_standard_id" />
-                <field name="op_batch_id" />
-                <field name="school_day" required="1"/>
-              </group>
-            </group>
-            <notebook>
-              <page string="Enrollment Lines">
-                <field name="ac_enrollment_line_ids" nolabel="1" >
-                  <tree string="Subject Lines" editable="bottom">
-                    <!-- <field name="taken" /> -->
-                    <field name="subject_id" on_change="onchange_subject_id( parent.partner_id, parent.op_standard_id, subject_id, parent.enrollment_time, parent.enrollment_date)" />
-                    <field name="credits" readonly="1" /> 
-                    <field name="enrollment_price" readonly="1" />
-                    <field name="tariff_price" readonly="1" />
-                    <field name="repeat_registration" on_change="onchange_repeat_registration( parent.op_standard_id, repeat_registration )"/>
-                    <field name="additional_price" readonly="1" />
-                    <field name="amount" readonly="1" />
-                  </tree>
-                </field>
-                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
-                  <field name="amount_enrollment" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                  <field name="amount_tariff" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                  <field name="amount_additional" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                  <div class="oe_subtotal_footer_separator oe_inline">
-                      <label for="amount_total" />
-                      <button name="button_dummy"
-                          states="draft,sent" string="(update)" type="object" class="oe_edit_only oe_link"/>
-                  </div>
-                  <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                </group>
-                <div class="oe_clear"/>
-              </page>
-            </notebook>
-          </sheet>
-          <div class="oe_chatter">
-	      	  <field name="message_follower_ids" widget="mail_followers"/>
-	          <field name="message_ids" widget="mail_thread"/>
-	      </div>
-        </form>
-      </field>
-    </record>
-
+							</group>
+							<!-- <group> <field name="granted" /> <field name="granted_id" /> 
+								</group> -->
+							<group>
+								<field name="op_course_id" />
+								<field name="op_standard_id" />
+								<field name="op_batch_id" />
+								<field name="school_day" required="1" />
+							</group>
+						</group>
+						<notebook>
+							<page string="Enrollment Lines">
+								<field name="ac_enrollment_line_ids" nolabel="1">
+									<tree string="Subject Lines" editable="bottom">
+										<!-- <field name="taken" /> -->
+										<field name="subject_id"
+											on_change="onchange_subject_id( parent.partner_id, parent.op_standard_id, subject_id, parent.enrollment_time, parent.enrollment_date)" />
+										<field name="credits" readonly="1" />
+										<field name="enrollment_price" readonly="1" />
+										<field name="tariff_price" readonly="1" />
+										<field name="repeat_registration"
+											on_change="onchange_repeat_registration( parent.op_standard_id, repeat_registration )" />
+										<field name="additional_price" readonly="1" />
+										<field name="amount" readonly="1" />
+									</tree>
+								</field>
+								<group class="oe_subtotal_footer oe_right" colspan="2"
+									name="sale_total">
+									<field name="amount_enrollment" widget='monetary'
+										options="{'currency_field': 'currency_id'}" />
+									<field name="amount_tariff" widget='monetary'
+										options="{'currency_field': 'currency_id'}" />
+									<field name="amount_additional" widget='monetary'
+										options="{'currency_field': 'currency_id'}" />
+									<div class="oe_subtotal_footer_separator oe_inline">
+										<label for="amount_total" />
+										<button name="button_dummy" states="draft,sent" string="(update)"
+											type="object" class="oe_edit_only oe_link" />
+									</div>
+									<field name="amount_total" nolabel="1"
+										class="oe_subtotal_footer_separator" widget='monetary'
+										options="{'currency_field': 'currency_id'}" />
+								</group>
+								<div class="oe_clear" />
+							</page>
+						</notebook>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers" />
+						<field name="message_ids" widget="mail_thread" />
+					</div>
+				</form>
+			</field>
+		</record>
+		<record id="view_ac_enrollment_sale_search" model="ir.ui.view">
+			<field name="name">ac_enrollment.sale.search</field>
+			<field name="model">ac_enrollment.sale</field>
+			<field name="arch" type="xml">
+				<search string="Search Enrollment">
+					<separator string="State"/>
+					<filter name="draft" string="Draft"
+						domain="[('state','=','draft')]" />
+					<filter name="confirmed" string="Confirmed"
+						domain="[('state','=','confirmed')]" />
+					<filter name="paid" string="Paid"
+						domain="[('state','=','paid')]" />
+					<filter name="ordinary" string="Ordinary"
+						domain="[('enrollment_time','=','ordinary')]" />
+					<filter name="extraordinary" string="Ordinary"
+						domain="[('enrollment_time','=','extraordinary')]" />
+					<field name="school_day" />
+					<field name="student_id" />
+					<field name="partner_id" />
+					<group expand="0" string="Group By...">
+						<filter string="Student" context="{'group_by': 'student_id'}" />
+						<filter string="Partner" context="{'group_by': 'partner_id'}" />
+						<filter string="School Day" context="{'group_by': 'school_day'}" />
+						<filter string="Course" context="{'group_by': 'op_course_id'}" />
+        				<filter string="Level" context="{'group_by': 'op_standard_id'}" />
+        				<filter string="Period" context="{'group_by': 'op_batch_id'}" />
+        				<filter string="Enrollment Time" context="{'group_by': 'enrollment_time'}" />
+					</group>
+				</search>
+			</field>
+		</record>
 		<record model="ir.actions.act_window" id="act_open_ac_enrollment_view">
 			<field name="name">Enrollments</field>
 			<field name="type">ir.actions.act_window</field>
@@ -110,13 +148,22 @@
 			<field name="context">{}</field>
 		</record>
 
-    <!-- Menu -->
-    <menuitem action="act_open_ac_enrollment_view" id="menu_ac_enrollment" parent="ac_enrollment.menu_enrollment" sequence="20" groups="base.group_sale_salesman,base.group_sale_manager"/>
-    <menuitem id="ac_enrollment.menu_configuration" name="Configuration" parent="ac_enrollment.menu_base_enrollment" sequence="9"/>
-    <menuitem action="act_open_op_course_view" id="menu_op_course" parent="ac_enrollment.menu_configuration" sequence="10" groups="base.group_sale_salesman,base.group_sale_manager"/>
-    <menuitem action="act_open_op_standard_view" id="menu_op_standard" parent="ac_enrollment.menu_configuration" sequence="20" groups="base.group_sale_salesman,base.group_sale_manager"/>
-    <menuitem action="act_open_op_batch_view" id="menu_op_batch" parent="ac_enrollment.menu_configuration" sequence="30" groups="base.group_sale_salesman,base.group_sale_manager"/>
+		<!-- Menu -->
+		<menuitem action="act_open_ac_enrollment_view" id="menu_ac_enrollment"
+			parent="ac_enrollment.menu_enrollment" sequence="20"
+			groups="base.group_sale_salesman,base.group_sale_manager" />
+		<menuitem id="ac_enrollment.menu_configuration" name="Configuration"
+			parent="ac_enrollment.menu_base_enrollment" sequence="9" />
+		<menuitem action="act_open_op_course_view" id="menu_op_course"
+			parent="ac_enrollment.menu_configuration" sequence="10"
+			groups="base.group_sale_salesman,base.group_sale_manager" />
+		<menuitem action="act_open_op_standard_view" id="menu_op_standard"
+			parent="ac_enrollment.menu_configuration" sequence="20"
+			groups="base.group_sale_salesman,base.group_sale_manager" />
+		<menuitem action="act_open_op_batch_view" id="menu_op_batch"
+			parent="ac_enrollment.menu_configuration" sequence="30"
+			groups="base.group_sale_salesman,base.group_sale_manager" />
 
-  </data>
+	</data>
 </openerp>
 

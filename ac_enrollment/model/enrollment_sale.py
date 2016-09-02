@@ -21,6 +21,7 @@
 
 from datetime import datetime, timedelta
 import time
+import openerp
 from openerp import SUPERUSER_ID
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
@@ -33,13 +34,44 @@ class enrollment_sale(osv.Model):
     _name = "ac_enrollment.sale"
     _description = "Enrollment"
     _inherit = "mail.thread"
-
+    
+    def unlink(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        enrollment = self.read(cr, uid, ids, ['state'], context=context)
+        unlink_ids, line_ids = [], []
+        line_enroll_obj = self.pool.get('ac_enrollment.sale_line')
+        for t in enrollment:
+            if t['state'] not in ('draft', 'cancel'):
+                raise openerp.exceptions.Warning(_('You cannot delete an Enrollment which is not draft or cancelled.'))
+            else:
+                line_ids.extend([line.id for line in self.browse(cr, uid, t['id'], context=context).ac_enrollment_line_ids])
+                unlink_ids.append(t['id'])
+        osv.osv.unlink(line_enroll_obj, cr, uid, line_ids, context=context)
+        osv.osv.unlink(self, cr, uid, unlink_ids, context=context)
+        return True
+    
+    def copy(self, cr, uid, id, default=None, context=None):
+        if not default:
+            default = {}
+        default.update({
+            'sale_order_id': False,
+        })
+        return super(enrollment_sale, self).copy(cr, uid, id, default, context=context)
+    
+    def onchange_student_id(self, cr, uid, ids, student_id, context=None):
+        context = context or {}
+        res = {'value': {}}
+        if student_id:
+            student = self.pool.get('ac.student').read(cr, uid, student_id, ['partner_id.id'], context=context)
+            res['value'].update(partner_id=student.get('partner_id'))
+        return res
+    
     def _enrollment_amount(self, cr, uid, ids, field, arg, context=None):
         res = {}
         for enrollment in self.browse(cr, uid, ids, context=context):
             res[enrollment.id] = sum([line.credits * line.enrollment_price
                 for line in enrollment.ac_enrollment_line_ids if line.taken])
-
         return res
 
     def _tariff_amount(self, cr, uid, ids, field, arg, context=None):
@@ -47,7 +79,6 @@ class enrollment_sale(osv.Model):
         for enrollment in self.browse(cr, uid, ids, context=context):
             res[enrollment.id] = sum([line.credits * line.tariff_price
                 for line in enrollment.ac_enrollment_line_ids if line.taken])
-
         return res
 
 
@@ -56,7 +87,6 @@ class enrollment_sale(osv.Model):
         for enrollment in self.browse(cr, uid, ids, context=context):
             res[enrollment.id] = sum([line.additional_price
                 for line in enrollment.ac_enrollment_line_ids if line.taken])
-
         return res
 
     def _total_amount(self, cr, uid, ids, field, arg, context=None):
@@ -73,7 +103,7 @@ class enrollment_sale(osv.Model):
         'partner_id':fields.many2one('res.partner', 'Partner', required=True),
         'enrollment_date':fields.date('Enrollment Date', required=True),
         'enrollment_time':fields.selection([('ordinary', 'Ordinary'),
-            ('extraordinay', 'Extraordinary')], string="Enrollment Time",
+            ('extraordinary', 'Extraordinary')], string="Enrollment Time",
             required=True),
         'state':fields.selection([('draft','Draft Enrollment'),
             ('confirmed', 'Confirmed Enrollment'),
@@ -111,8 +141,6 @@ class enrollment_sale(osv.Model):
         'school_day':fields.selection([('m','Matutino'),
             ('e', 'Vespertino')], 'Jordada', required=False,
             help='School day assigned to the student'),
-
-
     }
 
     _defaults = {
@@ -283,29 +311,27 @@ class enrollment_sale_line(osv.Model):
     def onchange_subject_id(self, cr, uid, ids, partner_id, standard_id, 
             subject_id, enrollment_time, date_order, context=None):
         context = context or {}
-
-        subject = self.pool.get('op.subject').browse(cr, uid, subject_id, context)
-        result = {'credits': subject.credits}
+        result = {}
+        if subject_id:
+            subject = self.pool.get('op.subject').browse(cr, uid, subject_id, context)
+            result = {'credits': subject.credits}
         warning = {}
         domain = {}
         product_uom_obj = self.pool.get('product.uom')
         partner_obj = self.pool.get('res.partner')
         product_obj = self.pool.get('product.product')
-        standard = self.pool.get('op.standard').browse(cr, uid, standard_id, context)
-
-        tariff_product =  standard.course_id.tariff_product_id
-        enrollment_product = standard.course_id.enrollment_product_id
-        additional_product = standard.course_id.aditional_product_id
-        if enrollment_time == 'ordinary':
-            pricelist = standard.property_product_pricelist
-        elif enrollment_time == 'extraordinay':
-            pricelist = standard.extra_property_product_pricelist
-
+        tariff_product, enrollment_product, pricelist = False, False, False
+        if standard_id:
+            standard = self.pool.get('op.standard').browse(cr, uid, standard_id, context)
+            tariff_product =  standard.course_id.tariff_product_id
+            enrollment_product = standard.course_id.enrollment_product_id
+            additional_product = standard.course_id.aditional_product_id
+            if enrollment_time == 'ordinary':
+                pricelist = standard.property_product_pricelist
+            elif enrollment_time == 'extraordinay':
+                pricelist = standard.extra_property_product_pricelist
         products = {'enrollment':enrollment_product, 'tariff': tariff_product,  }
-
         warning_msgs = ''
-
-
         if not pricelist:
             warn_msg = _('You have to select a pricelist standard in the enrollment form !\n'
                     'Please set one before choosing a subject.')
@@ -313,7 +339,6 @@ class enrollment_sale_line(osv.Model):
         else:
             for product_type, product in products.iteritems():
                 price = self.pool.get('product.pricelist').price_get(cr, uid, [pricelist.id], product.id, subject.credits)[pricelist.id]
-
                 if price is False:
                     warn_msg = _("Cannot find a pricelist line matching this product and quantity.\n"
                             "You have to change either the product, the quantity or the pricelist.")

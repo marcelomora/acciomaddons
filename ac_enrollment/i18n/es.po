@@ -181,7 +181,7 @@ msgstr "(actualizar)"
 #: field:ac.student,partner_id:0
 #: field:ac_enrollment.sale,partner_id:0
 msgid "Partner"
-msgstr "Tercero"
+msgstr "Facturar a"
 
 #. module: ac_enrollment
 #: view:ac_enrollment.sale:0
@@ -666,7 +666,7 @@ msgstr "Total"
 #. module: ac_enrollment
 #: field:ac_enrollment.sale,enrollment_time:0
 msgid "Enrollment Time"
-msgstr "Hora Matrícula"
+msgstr "Tipo Matrícula"
 
 #. module: ac_enrollment
 #: model:ir.model,name:ac_enrollment.model_op_division
