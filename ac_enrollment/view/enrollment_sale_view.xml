@@ -52,8 +52,9 @@
 								<field name="enrollment_time" />
 								<field name="sale_order_id" readonly="1"
 									attrs="{'invisible': [('state', 'in', ('draft'))]} " />
-
-							</group>
+				                <field name="account_invoice_id" readonly="1" attrs="{'invisible': [('state', 'in', ('draft'))]}"/>
+				                <field name="invoice_state"/>
+              				</group>
 							<!-- <group> <field name="granted" /> <field name="granted_id" /> 
 								</group> -->
 							<group>

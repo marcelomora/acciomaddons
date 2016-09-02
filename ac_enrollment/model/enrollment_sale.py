@@ -96,6 +96,14 @@ class enrollment_sale(osv.Model):
                     enrollment.amount_tariff + enrollment.amount_additional
             return res
 
+    INVOICE_STATE = [
+        ('draft','Draft'),
+        ('proforma','Pro-forma'),
+        ('proforma2','Pro-forma'),
+        ('open','Open'),
+        ('paid','Paid'),
+        ('cancel','Cancelled')
+    ]
 
     _columns = {
         'name':fields.char('Name', 50, required=True, readonly=True),
@@ -138,9 +146,15 @@ class enrollment_sale(osv.Model):
         'sale_order_id': fields.many2one('sale.order', 'Sale Order', 
             help=""""Referenced sale order to this enrollment"""
             ),
+        'account_invoice_id': fields.many2one('account.invoice', 'Account Invoice', 
+            help=""""Referenced account invoice to this enrollment"""
+            ),
         'school_day':fields.selection([('m','Matutino'),
             ('e', 'Vespertino')], 'Jordada', required=False,
             help='School day assigned to the student'),
+        'invoice_state': fields.related('account_invoice_id', 'state', type='selection',
+                                        selection=INVOICE_STATE, string='State', readonly=True,
+                                        help='This field defines the status of the invoice associated')
     }
 
     _defaults = {
@@ -194,26 +208,20 @@ class enrollment_sale(osv.Model):
 
     def action_enrollment_done(self, cr, uid, ids, context=None):
         res = {}
-
         for enrollment in self.browse(cr, uid, ids, context=context):
             order_id = self._create_sale_order(cr, uid, enrollment)
             self._create_sale_order_line(cr, uid, order_id, enrollment )
-
             sale_order_obj = self.pool.get('sale.order')
             sale_order_obj.action_button_confirm(cr, uid, [order_id])
             invoice_id = sale_order_obj.action_invoice_create(cr, uid, [order_id])
-
             account_invoice_obj = self.pool.get('account.invoice')
             account_invoice_obj.write(cr, uid, [invoice_id], 
                 {'student_id': enrollment.student_id.id,
                  'enrollment_id': enrollment.id})
-
             """
-            Link to sale order
+            Link to sale order and account invoice
             """
-
-            enrollment.write({'state':'confirmed', 'sale_order_id': order_id})
-
+            enrollment.write({'state':'confirmed', 'sale_order_id': order_id, 'account_invoice_id': invoice_id})
         return res
 
     def action_load_subject(self, cr, uid, ids, context=None):
