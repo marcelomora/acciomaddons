@@ -46,17 +46,4 @@ class sale_order_line(osv.osv):
                                                help=''),
     }
      
-sale_order_line()   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+sale_order_line()    
