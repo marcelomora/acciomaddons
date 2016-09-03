@@ -19,16 +19,11 @@
 #
 ##############################################################################
 
-from datetime import datetime, timedelta
-import time
-import openerp
-from openerp import SUPERUSER_ID
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
-import openerp.addons.decimal_precision as dp
-from openerp import workflow
-import pdb
+from datetime import datetime, timedelta
+import openerp
+import time
 
 
 class enrollment_sale(osv.Model):
@@ -163,7 +158,6 @@ class enrollment_sale(osv.Model):
                 for line in enrollment.ac_enrollment_line_ids if line.taken])
         return res
 
-
     def _additional_amount(self, cr, uid, ids, field, arg, context=None):
         res = {}
         for enrollment in self.browse(cr, uid, ids, context=context):
@@ -261,7 +255,6 @@ class enrollment_sale(osv.Model):
         defaults['partner_id'] = enrollment.partner_id.id
         defaults['enrollment_id'] = enrollment.id
         customer = enrollment.partner_id
-
         return sale_order_obj.create(cr, uid, defaults)
 
     def _create_sale_order_line(self, cr, uid, sale_order_id, enrollment):
@@ -269,33 +262,26 @@ class enrollment_sale(osv.Model):
         product_obj = self.pool.get('product.product')
         sale_order_line = self.pool.get('sale.order.line')
         enrollment_line_obj = self.pool.get('ac_enrollment.sale_line')
-
         sale_order = sale_order_obj.browse(cr, uid, sale_order_id)
-
         pricelist = sale_order.pricelist_id
         products = []
         lines = []
-        products.append((enrollment.amount_enrollment, enrollment.op_course_id.enrollment_product_id, u"Matrícula {}".format(enrollment.op_standard_id.name)))
-        products.append((enrollment.amount_tariff, enrollment.op_course_id.tariff_product_id, u"Créditos {}".format(enrollment.op_standard_id.name)))
+        products.append((enrollment.amount_enrollment, enrollment.op_course_id.enrollment_product_id, u"Matrícula {}".format('aaaa')))
+        products.append((enrollment.amount_tariff, enrollment.op_course_id.tariff_product_id, u"Créditos {}".format('bbbb')))
         if enrollment.amount_additional:
             products.append((enrollment.amount_additional, enrollment.op_course_id.aditional_product_id, u"Derechos matrícula"))
-
         for product in products:
             defaults = sale_order_line.product_id_change(cr, uid, [], pricelist.id,
                     product[1].id, qty=1,
                     date_order=fields.date.context_today(self, cr, uid),
                     partner_id=sale_order.partner_id.id)['value']
-
             defaults.update({'order_id':sale_order.id, 'product_id':product[1].id,
                              'product_uom_qty':1, 'price_unit':product[0], 'name': product[2]})
-
-            order_line_id = sale_order_line.create(cr, uid, defaults)
-                       
+            order_line_id = sale_order_line.create(cr, uid, defaults)                       
             #Para cada producto de los 3 productos a facturar les agregamos las materias que le afectan
             for line in enrollment.ac_enrollment_line_ids:
                 line.write({'order_line_ids': [[6,0,[order_line_id]]]})
         return True
-
 
     def action_enrollment_done(self, cr, uid, ids, context=None):
         res = {}
@@ -321,7 +307,6 @@ class enrollment_sale(osv.Model):
             context = {}
         line_obj = self.pool.get('ac_enrollment.sale_line')
         subject_obj = self.pool.get('op.subject')
-
         for enrollment in self.browse(cr, uid, ids):
             for op_standard_id in enrollment.op_standard_ids:
                 subject_ids = subject_obj.search(cr, uid, [('standard_id', '=', op_standard_id.id)])
@@ -335,11 +320,9 @@ class enrollment_sale(osv.Model):
                     })
                     on_change = line_obj.onchange_subject_id(cr, uid, [line_id], 
                         enrollment.student_id.id, enrollment.op_standard_id.id, subject, 
-                        enrollment.enrollment_time, enrollment.enrollment_date, context=None)
-    
+                        enrollment.enrollment_time, enrollment.enrollment_date, context=None)    
                     value = on_change['value']
-                    value['registration'] = 'ordinary'
-    
+                    value['registration'] = 'ordinary'    
                     line_obj.write(cr, uid, line_id, on_change['value'])
 
 class enrollment_sale_line(osv.Model):
@@ -348,16 +331,13 @@ class enrollment_sale_line(osv.Model):
 
     def _get_amount(self, cr, uid, ids, field, arg, context=None):
         res = {}
-
         for line in self.browse(cr, uid, ids, context):
             if line.credits and line.enrollment_price and line.tariff_price:
                 res[line.id] = (line.credits * line.enrollment_price) +\
                           (line.credits * line.tariff_price) +\
                           line.additional_price
-
             else:
                 res[line.id] = 0.0
-
         return res
 
     _columns = {
@@ -406,7 +386,6 @@ class enrollment_sale_line(osv.Model):
             res['value']['enrollment_price'] = batch.ex_credit_en_price
             res['value']['tariff_price'] = batch.ex_credit_ta_price
         """
-
         return res
 
     def onchange_subject_id(self, cr, uid, ids, partner_id, standard_id, 
@@ -443,7 +422,6 @@ class enrollment_sale_line(osv.Model):
                 if price is False:
                     warn_msg = _("Cannot find a pricelist line matching this product and quantity.\n"
                             "You have to change either the product, the quantity or the pricelist.")
-
                     warning_msgs += _("No valid pricelist line found ! :") + warn_msg +"\n\n"
                 else:
                     result.update({'%s_price' % product_type: price})
@@ -459,26 +437,21 @@ class enrollment_sale_line(osv.Model):
         result = {'additional_price': 0.0 }
         if repeat_registration == 'first':
             return {'value': result}
-
         standard = self.pool.get('op.standard').browse(cr, uid, standard_id, context)
         product = standard.course_id.aditional_product_id
         pricelist = standard.property_product_pricelist
         result = {}
-        warning = {}
-        
+        warning = {}        
         warning_msgs = ''
-
         if not pricelist:
             warn_msg = _('You have to select a pricelist standard in the enrollment form !\n'
                     'Please set one before choosing a subject.')
             warning_msgs += _("No Pricelist ! : ") + warn_msg +"\n\n"
         else:
             price = self.pool.get('product.pricelist').price_get(cr, uid, [pricelist.id], product.id, 1.0)[pricelist.id]
-
             if price is False:
                 warn_msg = _("Cannot find a pricelist line matching this product and quantity.\n"
                         "You have to change either the product, the quantity or the pricelist.")
-
                 warning_msgs += _("No valid pricelist line found ! :") + warn_msg +"\n\n"
             else:
                 result.update({'additional_price': price})
