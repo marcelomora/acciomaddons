@@ -275,8 +275,8 @@ class enrollment_sale(osv.Model):
         pricelist = sale_order.pricelist_id
         products = []
         lines = []
-        products.append((enrollment.amount_enrollment, enrollment.op_course_id.enrollment_product_id, u"Matrícula {}".format(enrollment.op_standard_id.name) ))
-        products.append((enrollment.amount_tariff, enrollment.op_course_id.tariff_product_id, u"Créditos {}".format(enrollment.op_standard_id.name) ))
+        products.append((enrollment.amount_enrollment, enrollment.op_course_id.enrollment_product_id, u"Matrícula {}".format(enrollment.op_standard_id.name)))
+        products.append((enrollment.amount_tariff, enrollment.op_course_id.tariff_product_id, u"Créditos {}".format(enrollment.op_standard_id.name)))
         if enrollment.amount_additional:
             products.append((enrollment.amount_additional, enrollment.op_course_id.aditional_product_id, u"Derechos matrícula"))
 
