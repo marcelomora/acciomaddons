@@ -34,6 +34,8 @@ class op_standard(osv.osv):
             required=True, help= u""" Tarifa a ser utilizada en matrícula extraordinaria """),
         'sequence':fields.integer('Sequence'),
         'division_ids': fields.many2many('op.division', 'standard_division_rel', 'standard_id', 'division_id', 'Divisions', ),
+        'account_analytic_id': fields.many2one('account.analytic.account', 'Analytic Account',
+                                               help=''),
 #            'student_ids': fields.many2many('op.student', 'op_student_standard_rel', 'op_student_id', 'op_standard_id', string='Student(s)'),
 #            'class_ids': fields.many2many('op.gr.setup', 'op_class_setup_rel','op_standard_id', 'op_setup_id' , string='Class'),
     }

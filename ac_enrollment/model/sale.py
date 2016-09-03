@@ -19,15 +19,44 @@
 #
 ##############################################################################
 from openerp.osv import fields, osv
+from openerp.tools.translate import _
+
 
 class SaleOrder(osv.osv):
     _inherit = 'sale.order'
     _description = 'Sale Order'
+    
     _columns = {
-    	'enrollment_id': fields.many2one(
-    	    'ac_enrollment.sale',
-    	    'Enrollment',
-    	),
+    	'enrollment_id': fields.many2one('ac_enrollment.sale', 'Enrollment', help=''),
     }
-    _defaults = {
+    
+class sale_order_line(osv.osv):
+    _inherit = 'sale.order.line'
+    
+    def _prepare_order_line_invoice_line(self, cr, uid, line, account_id=False, context=None):
+        if context is None:
+            context = {}
+        vals = super(sale_order_line, self)._prepare_order_line_invoice_line(cr, uid, line, account_id, context=context)
+        if line.account_analytic_id and not vals['account_analytic_id']:
+            vals['account_analytic_id'] = line.account_analytic_id.id
+        return vals
+    
+    _columns = {
+        'account_analytic_id': fields.many2one('account.analytic.account', 'Analytic Account',
+                                               help=''),
     }
+     
+sale_order_line()   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
