@@ -31,6 +31,9 @@ class enrollment_sale(osv.Model):
     _description = "Enrollment"
     _inherit = "mail.thread"
     
+    def write(self, cr, uid, ids, vals, context=None):            
+        return super(enrollment_sale, self).write(cr, uid, ids, vals, context=context)
+    
     def unlink(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
@@ -243,10 +246,7 @@ class enrollment_sale(osv.Model):
     }
 
     def button_dummy(self, cr, uid, ids, context=None):
-        return True
-
-    def write(self, cr, uid, ids, vals, context=None):
-        return super(enrollment_sale, self).write(cr, uid, ids, vals, context=context)
+        return True    
     
     def _create_sale_order(self, cr, uid, enrollment):
         sale_order_obj = self.pool.get('sale.order')
@@ -266,8 +266,8 @@ class enrollment_sale(osv.Model):
         pricelist = sale_order.pricelist_id
         products = []
         lines = []
-        products.append((enrollment.amount_enrollment, enrollment.op_course_id.enrollment_product_id, u"Matrícula {}".format('aaaa')))
-        products.append((enrollment.amount_tariff, enrollment.op_course_id.tariff_product_id, u"Créditos {}".format('bbbb')))
+        products.append((enrollment.amount_enrollment, enrollment.op_course_id.enrollment_product_id, u"Matrícula {}".format(enrollment.op_standard_id.name)))
+        products.append((enrollment.amount_tariff, enrollment.op_course_id.tariff_product_id, u"Créditos {}".format(enrollment.op_standard_id.name)))
         if enrollment.amount_additional:
             products.append((enrollment.amount_additional, enrollment.op_course_id.aditional_product_id, u"Derechos matrícula"))
         for product in products:
