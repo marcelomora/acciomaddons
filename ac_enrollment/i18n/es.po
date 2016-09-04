@@ -117,6 +117,7 @@ msgstr "Período"
 
 #. module: ac_enrollment
 #: field:ac_enrollment.sale_line,amount:0
+#: field:ac.enrollment.consolidation,amount:0
 msgid "Amount"
 msgstr "Monto"
 
@@ -317,6 +318,9 @@ msgstr "Fecha Inicio"
 
 #. module: ac_enrollment
 #: field:ac_enrollment.sale_line,subject_id:0
+#: model:ir.actions.act_window,name:ac_enrollment.act_open_op_subject_view
+#: model:ir.ui.menu,name:ac_enrollment.menu_op_subject
+#: view:op.subject:0
 msgid "Subject"
 msgstr "Materia"
 
@@ -583,12 +587,14 @@ msgid "Gender"
 msgstr "Género"
 
 #. module: ac_enrollment
-#: view:ac.student:0
+#: field:ac.enrollment.consolidation,enrollment_consolidation_id:0
 #: view:ac_enrollment.sale:0
 #: field:ac_enrollment.sale,amount_enrollment:0
+#: model:ir.actions.report.xml,name:ac_enrollment.report_enrollment
 #: model:ir.model,name:ac_enrollment.model_ac_enrollment_sale
 #: model:ir.ui.menu,name:ac_enrollment.menu_base_enrollment
 #: model:ir.ui.menu,name:ac_enrollment.menu_enrollment
+#: field:sale.order,enrollment_id:0
 msgid "Enrollment"
 msgstr "Matrícula"
 
@@ -672,4 +678,38 @@ msgstr "Tipo Matrícula"
 #: model:ir.model,name:ac_enrollment.model_op_division
 msgid "op.division"
 msgstr "Paralelo"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Summary for Invoice"
+msgstr "Resumen para factura"
+
+#. module: ac_enrollment
+#: field:ac.enrollment.consolidation,product_id:0
+msgid "Product"
+msgstr "Producto"
+
+#. module: ac_enrollment
+#: field:ac.enrollment.consolidation,level:0
+#: field:ac_enrollment.sale_line,standard_id:0
+#: view:op.subject:0
+msgid "Level"
+msgstr "Nivel"
+
+#. module: ac_enrollment
+#: field:ac.enrollment.consolidation,account_analytic_id:0
+#: field:op.standard,account_analytic_id:0
+#: field:sale.order.line,account_analytic_id:0
+msgid "Analytic Account"
+msgstr "Centro de costo"
+
+#. module: ac_enrollment
+#: view:op.subject:0
+msgid "Subject Details"
+msgstr "Detalles de la materia"
+
+#. module: ac_enrollment
+#: model:ir.actions.report.xml,name:ac_enrollment.report_enrollment_invoice
+msgid "Enrollment Invoice"
+msgstr "Factura - Matrícula"
 

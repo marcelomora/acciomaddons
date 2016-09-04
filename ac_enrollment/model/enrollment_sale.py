@@ -569,7 +569,7 @@ class enrollment_sale(osv.Model):
 #             #Para cada producto de los 3 productos a facturar les agregamos las materias que le afectan
 #             for line in enrollment.ac_enrollment_line_ids:
 #                 line.write({'invoice_line_ids': [[6, 0, invoice_line_ids]]}) 
-#             account_invoice_obj.write(cr, uid, [invoice_id], {'student_id': enrollment.student_id.id, 'enrollment_id': enrollment.id})
+            account_invoice_obj.write(cr, uid, [invoice_id], {'student_id': enrollment.student_id.id, 'enrollment_id': enrollment.id})
             """
             Link to sale order and account invoice
             """

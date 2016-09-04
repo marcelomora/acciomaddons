@@ -87,7 +87,7 @@
 										<field name="tariff_price" readonly="1" />
 										<field name="repeat_registration"
 											on_change="onchange_repeat_registration(standard_id, repeat_registration )"/>
-										<field name="additional_price" readonly="0"/>
+										<field name="additional_price" readonly="1"/>
 										<field name="amount" readonly="1"/>
 									</tree>
 								</field>
