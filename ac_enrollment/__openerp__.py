@@ -44,6 +44,7 @@ Management of enrollment for student at an educational institute.
         'view/invoice_view.xml',
         'security/groups.xml',
         'security/ir.model.access.csv',
+        'report/report_data.xml'
     ],
     'js': [
     ],
@@ -58,5 +59,3 @@ Management of enrollment for student at an educational institute.
     'installable': True,
     'auto_install': False,
 }
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-

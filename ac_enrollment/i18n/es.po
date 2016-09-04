@@ -241,8 +241,8 @@ msgstr "Matrícula Borrador"
 
 #. module: ac_enrollment
 #: selection:ac_enrollment.sale_line,repeat_registration:0
-msgid "Second Registration"
-msgstr "Segunda Matrícula"
+msgid "Second"
+msgstr "Segunda"
 
 #. module: ac_enrollment
 #: model:ir.ui.menu,name:ac_enrollment.menu_configuration
@@ -480,8 +480,8 @@ msgstr "Fecha de Nacimiento"
 
 #. module: ac_enrollment
 #: selection:ac_enrollment.sale_line,repeat_registration:0
-msgid "Third Registration"
-msgstr "Tercera Matrícula"
+msgid "Third"
+msgstr "Tercera"
 
 #. module: ac_enrollment
 #: field:ac_enrollment.sale,amount_additional:0
@@ -563,8 +563,8 @@ msgstr "Producto Adicional"
 
 #. module: ac_enrollment
 #: selection:ac_enrollment.sale_line,repeat_registration:0
-msgid "First Registration"
-msgstr "Primera Matrícula"
+msgid "First"
+msgstr "Primera"
 
 #. module: ac_enrollment
 #: field:ac.grant,name:0

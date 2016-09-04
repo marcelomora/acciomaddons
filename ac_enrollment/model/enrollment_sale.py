@@ -251,6 +251,23 @@ class enrollment_sale(osv.Model):
             result['res_id'] = invoice_ids and invoice_ids[0] or False
         return result
     
+    def action_print_report(self, cr, uid, ids, context=None):
+        '''
+        Este método imprime el reporte de aprobación de becas   
+        :param cr: Cursor estándar de base de datos PostgreSQL
+        :param uid: ID del usuario actual
+        :param ids: IDs de la beca
+        :param context: Diccionario de datos de contexto adicional
+        '''     
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'report_enrollment',
+            'datas': {
+                'model': 'ac_enrollment.sale',
+                'res_ids': ids
+            }
+        }
+    
     def _amount_all(self, cr, uid, ids, fields, args=None, context=None):
         '''
         
@@ -300,9 +317,10 @@ class enrollment_sale(osv.Model):
         'enrollment_time':fields.selection([('ordinary', 'Ordinary'),
             ('extraordinary', 'Extraordinary')], string="Enrollment Time",
             required=True),
-        'state':fields.selection([('draft','Draft Enrollment'),
-            ('confirmed', 'Confirmed Enrollment'),
-            ('paid', 'Paid'),('done', 'Done')], string="Estado", help='fields help'),
+        'state':fields.selection([
+            ('draft','Draft Enrollment'),
+            ('confirmed', 'Confirmed Enrollment')
+        ], string="Estado", help='fields help'),
         'payment_reference':fields.char('Payment Reference', 255,
             help='Banking deposit or payment reference'),
         'granted':fields.boolean('Granted', help='Is this enrollment granted?'),
@@ -414,7 +432,7 @@ class enrollment_sale(osv.Model):
 #                 line.write({'order_line_ids': [[4, order_line_id]]})
         return True
 
-    def action_enrollment_done(self, cr, uid, ids, context=None):
+    def action_enrollment_confirmed(self, cr, uid, ids, context=None):
         '''
         
         :param cr:
@@ -442,38 +460,7 @@ class enrollment_sale(osv.Model):
             Link to sale order and account invoice
             """
             enrollment.write({'state': 'confirmed', 'sale_order_id': order_id, 'account_invoice_id': invoice_id})
-        return res
-
-    def action_load_subject(self, cr, uid, ids, context=None):
-        '''
-        
-        :param cr:
-        :param uid:
-        :param ids:
-        :param context:
-        '''
-        if not context:
-            context = {}
-        line_obj = self.pool.get('ac_enrollment.sale_line')
-        subject_obj = self.pool.get('op.subject')
-        for enrollment in self.browse(cr, uid, ids):
-            for op_standard_id in enrollment.op_standard_ids:
-                subject_ids = subject_obj.search(cr, uid, [('standard_id', '=', op_standard_id.id)])
-                if subject_ids:
-                    line_obj.unlink(cr, uid, [line.id for line in enrollment.ac_enrollment_line_ids], context)
-                for subject in subject_ids:
-                    line_id = line_obj.create(cr, uid, {
-                        'enrollment_sale_id': enrollment.id,
-                        'taken': True,
-                        'subject_id': subject,
-                    })
-                    on_change = line_obj.onchange_subject_id(cr, uid, [line_id], 
-                        enrollment.student_id.id, subject, 
-                        enrollment.enrollment_time, enrollment.enrollment_date, context=None)    
-                    value = on_change['value']
-                    value['registration'] = 'ordinary'    
-                    line_obj.write(cr, uid, line_id, on_change['value'])
-                    
+        return res                    
 
 class enrollment_sale_line(osv.Model):
     _name = 'ac_enrollment.sale_line'
@@ -508,9 +495,9 @@ class enrollment_sale_line(osv.Model):
         'enrollment_price':fields.float('Enrollment Price', readonly=False),
         'tariff_price':fields.float('Tariff Price', readonly=False),
         'repeat_registration':fields.selection([
-            ('first', 'First Registration'),
-            ('second', 'Second Registration'),
-            ('third', 'Third Registration')], 'Repeated Registration',
+            ('first', 'First'),
+            ('second', 'Second'),
+            ('third', 'Third')], 'Repeated Registration',
             help='Number of repeated registrations'),
         'additional_price':fields.float('Additional Price', readonly=False),
         'amount':fields.function(_get_amount, method=True, store=False,

@@ -28,13 +28,12 @@
 			<field name="arch" type="xml">
 				<form string="Enrollment" version="7.0">
 					<header>
-						<button name="action_enrollment_done" type="object" string="Create SO"
+						<button name="action_enrollment_confirmed" type="object" string="Create SO"
 							states="draft"/>
-						<field name="state" widget="statusbar" statusbar_visible="draft,sent,progress,done"
-							statusbar_colors='{"invoice_except":"red","waiting_date":"blue"}' />
-						<button name="action_load_subject" states="draft" string="Cargar Materias"
-							type="object" class="oe_highlight"/>
-						<button name="action_show_invoice" string="Show Invoice" states="confirmed,paid,done" type="object"/>
+						<field name="state" widget="statusbar" statusbar_visible="draft,confirmed"
+							statusbar_colors='{"invoice_except":"red","waiting_date":"blue"}'/>
+						<button name="action_show_invoice" string="Show Invoice" states="confirmed" type="object"/>
+						<button name="action_print_report" string="Print" type="object"/>
 					</header>
 					<sheet>
 						<h1>
@@ -52,8 +51,8 @@
 							<group>
 								<field name="enrollment_date" on_change="onchange_course_date(op_course_id, enrollment_date)" />
 								<field name="enrollment_time" />
-								<field name="sale_order_id" invisible="1" readonly="1"/>
-				                <field name="account_invoice_id" invisible="1" readonly="1"/>
+								<field name="sale_order_id" invisible="0" readonly="1"/>
+				                <field name="account_invoice_id" invisible="0" readonly="1"/>
 				                <field name="invoice_state" invisible="1"/>
               				</group>
 							<!-- <group> <field name="granted"/> <field name="granted_id"/> 
@@ -79,7 +78,7 @@
 										<field name="tariff_price" readonly="1"/>
 										<field name="repeat_registration"
 											on_change="onchange_repeat_registration( parent.op_standard_ids, repeat_registration )"/>
-										<field name="additional_price" readonly="0"/>
+										<field name="additional_price" readonly="1"/>
 										<field name="amount" readonly="1"/>
 									</tree>
 								</field>
@@ -132,11 +131,9 @@
 						domain="[('state','=','draft')]"/>
 					<filter name="confirmed" string="Confirmed"
 						domain="[('state','=','confirmed')]"/>
-					<filter name="paid" string="Paid"
-						domain="[('state','=','paid')]"/>
 					<filter name="ordinary" string="Ordinary"
 						domain="[('enrollment_time','=','ordinary')]"/>
-					<filter name="extraordinary" string="Ordinary"
+					<filter name="extraordinary" string="Extraordinary"
 						domain="[('enrollment_time','=','extraordinary')]"/>
 					<field name="school_day"/>
 					<field name="student_id"/>
