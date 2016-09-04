@@ -216,8 +216,8 @@ class enrollment_sale(osv.Model):
             batch_id = batch_obj.browse(cr, uid, op_batch_id, context=context)
             ordinary_start_date = datetime.strptime(batch_id.or_en_start_date, "%Y-%m-%d")
             extraordinary_end_date = datetime.strptime(batch_id.ex_en_end_date, "%Y-%m-%d")
-            if extraordinary_start_date <= enrollment_date and \
-                enrollment_date <= extraordinary_end_date:
+            enrollment_date = datetime.strptime(enrollment_date, "%Y-%m-%d")
+            if ordinary_start_date <= enrollment_date and enrollment_date <= extraordinary_end_date:
                 res['value'].update({'enrollment_time': False})
         return res
         
@@ -246,22 +246,23 @@ class enrollment_sale(osv.Model):
             else:
                 op_batch_ids = op_batch_obj.search(cr, uid, [('or_en_start_date','<=',enrollment_date),
                                                              ('ex_en_end_date','>=',enrollment_date)], context=context)
-        if op_batch_obj.browse(cr, uid, op_batch_id, context=context).course_id.id == op_course_id: 
-            op_batch_ids = [op_batch_id]
-        else:
-            res['value'].update(op_batch_id=op_batch_ids[0] if op_batch_ids else 0,op_standard_ids=[[6, 0, []]])
-        for op_batch in op_batch_obj.browse(cr, uid, op_batch_ids, context=context):
-            enrollment_date_datetime = datetime.strptime(enrollment_date or time.strftime("%Y-%m-%d"), "%Y-%m-%d")
-            ordinary_start_date = datetime.strptime(op_batch.or_en_start_date, "%Y-%m-%d")
-            ordinary_end_date = datetime.strptime(op_batch.or_en_end_date, "%Y-%m-%d")
-            if ordinary_start_date <= enrollment_date_datetime and \
-                enrollment_date_datetime <= ordinary_end_date:
-                value = {'enrollment_time': 'ordinary'}
-            extraordinary_start_date = datetime.strptime(op_batch.ex_en_start_date, "%Y-%m-%d")
-            extraordinary_end_date = datetime.strptime(op_batch.ex_en_end_date, "%Y-%m-%d")
-            if extraordinary_start_date <= enrollment_date_datetime and \
-                enrollment_date_datetime <= extraordinary_end_date:
-                value = {'enrollment_time': 'extraordinary'}
+        if op_batch_id:
+            if op_batch_obj.browse(cr, uid, op_batch_id, context=context).course_id.id == op_course_id: 
+                op_batch_ids = [op_batch_id]
+            else:
+                res['value'].update(op_batch_id=op_batch_ids[0] if op_batch_ids else 0,op_standard_ids=[[6, 0, []]])
+            for op_batch in op_batch_obj.browse(cr, uid, op_batch_ids, context=context):
+                enrollment_date_datetime = datetime.strptime(enrollment_date or time.strftime("%Y-%m-%d"), "%Y-%m-%d")
+                ordinary_start_date = datetime.strptime(op_batch.or_en_start_date, "%Y-%m-%d")
+                ordinary_end_date = datetime.strptime(op_batch.or_en_end_date, "%Y-%m-%d")
+                if ordinary_start_date <= enrollment_date_datetime and \
+                    enrollment_date_datetime <= ordinary_end_date:
+                    value = {'enrollment_time': 'ordinary'}
+                extraordinary_start_date = datetime.strptime(op_batch.ex_en_start_date, "%Y-%m-%d")
+                extraordinary_end_date = datetime.strptime(op_batch.ex_en_end_date, "%Y-%m-%d")
+                if extraordinary_start_date <= enrollment_date_datetime and \
+                    enrollment_date_datetime <= extraordinary_end_date:
+                    value = {'enrollment_time': 'extraordinary'}
         res['domain'].update(op_batch_id=[('id','in', op_batch_ids)])
         res['value'].update(value)
         return res
