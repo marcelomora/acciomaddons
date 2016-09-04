@@ -19,6 +19,7 @@
 				</tree>
 			</field>
 		</record>
+		
 		<record id="view_ac_enrollment_form" model="ir.ui.view">
 			<field name="name">ac.enrollment.form</field>
 			<field name="model">ac_enrollment.sale</field>
@@ -68,17 +69,28 @@
 						<notebook>
 							<page string="Enrollment Lines">
 								<field name="ac_enrollment_line_ids" nolabel="1">
-									<tree string="Subject Lines" editable="bottom">
+									<tree string="Subject Lines" editable="bottom" create="false">
 										<!-- <field name="taken"/> -->
 										<field name="subject_id"
-											on_change="onchange_subject_id( parent.partner_id, parent.op_standard_id, subject_id, parent.enrollment_time, parent.enrollment_date)"/>
+											on_change="onchange_subject_id(parent.partner_id, subject_id, parent.enrollment_time, parent.enrollment_date)"/>
+										<field name="standard_id"/>
 										<field name="credits" readonly="1"/>
 										<field name="enrollment_price" readonly="1"/>
 										<field name="tariff_price" readonly="1"/>
 										<field name="repeat_registration"
-											on_change="onchange_repeat_registration( parent.op_standard_id, repeat_registration )"/>
-										<field name="additional_price" readonly="1"/>
+											on_change="onchange_repeat_registration( parent.op_standard_ids, repeat_registration )"/>
+										<field name="additional_price" readonly="0"/>
 										<field name="amount" readonly="1"/>
+									</tree>
+								</field>
+								<br></br>
+								<separator string="Summary for Invoice" colspan="4"/>
+								<field name="enrollment_consolidation_ids" nolabel="1" readonly="1">
+									<tree string="Enrollment Consolidation" editable="bottom">
+										<field name="product_id"/>
+										<field name="level"/>
+										<field name="account_analytic_id"/>
+										<field name="amount"/>
 									</tree>
 								</field>
 								<group class="oe_subtotal_footer oe_right" colspan="2"
@@ -109,6 +121,7 @@
 				</form>
 			</field>
 		</record>
+		
 		<record id="view_ac_enrollment_sale_search" model="ir.ui.view">
 			<field name="name">ac_enrollment.sale.search</field>
 			<field name="model">ac_enrollment.sale</field>
@@ -133,13 +146,14 @@
 						<filter string="Partner" context="{'group_by': 'partner_id'}"/>
 						<filter string="School Day" context="{'group_by': 'school_day'}"/>
 						<filter string="Course" context="{'group_by': 'op_course_id'}"/>
-        				<filter string="Level" context="{'group_by': 'op_standard_id'}"/>
+        				<!--filter string="Level" context="{'group_by': 'op_standard_id'}"/-->
         				<filter string="Period" context="{'group_by': 'op_batch_id'}"/>
         				<filter string="Enrollment Time" context="{'group_by': 'enrollment_time'}"/>
 					</group>
 				</search>
 			</field>
 		</record>
+		
 		<record model="ir.actions.act_window" id="act_open_ac_enrollment_view">
 			<field name="name">Enrollments</field>
 			<field name="type">ir.actions.act_window</field>
