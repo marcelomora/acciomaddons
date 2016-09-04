@@ -74,7 +74,7 @@ msgid "Extraordinary"
 msgstr "Extraordinario"
 
 #. module: ac_enrollment
-#: field:ac_enrollment.sale,op_standard_id:0
+#: field:ac_enrollment.sale,op_standard_ids:0
 #: model:ir.actions.act_window,name:ac_enrollment.act_open_op_standard_view
 #: model:ir.ui.menu,name:ac_enrollment.menu_op_standard
 #: view:op.standard:0
