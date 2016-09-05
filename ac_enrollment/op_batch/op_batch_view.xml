@@ -30,38 +30,26 @@
 							<field name="end_date" />
 							<field name="course_id" />
 						</group>
-            <notebook>
-              <page string="Ordinary Enrollment">
-                <group>
-                  <group>
-                    <field name="or_en_start_date" />
-                    <field name="or_credit_en_price" />
-                    <field name="or_credit_ta_price" />
-                  </group>
-                  <group> 
-                    <field name="or_en_end_date" />
-                  </group>
-                </group>
-              </page>
-              <page string="Extrardinary Enrollment">
-                <group>
-                  <group>
-                    <field name="ex_en_start_date" />
-                    <field name="ex_credit_en_price" />
-                    <field name="ex_credit_ta_price" />
-                  </group>
-                  <group> 
-                    <field name="ex_en_end_date" />
-                  </group>
-                </group>
-              </page>
-              <page string="Additional Charges">
-                <group>
-                  <field name="second_enrollment_price" />
-                  <field name="third_enrollment_price" />
-                </group>
-              </page>
-            </notebook>
+						<notebook>
+							<page string="Enrollment Dates">
+								<group string="Ordinary Enrollment">
+									<group>
+										<field name="or_en_start_date" />
+									</group>
+									<group>
+										<field name="or_en_end_date" />
+									</group>
+								</group>
+								<group string="Extraordinary Enrollment">
+									<group>
+										<field name="ex_en_start_date" />
+									</group>
+									<group>
+										<field name="ex_en_end_date" />
+									</group>
+								</group>
+							</page>
+						</notebook>
 					</sheet>
 				</form>
 			</field>

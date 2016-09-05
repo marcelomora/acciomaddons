@@ -7,10 +7,11 @@
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<tree string="Subject">
-					<field name="name" />
 					<field name="code" />
-<!-- 					<field name="course_id" /> -->
-<!-- 					<field name="grade_waitage" /> -->
+					<field name="name" />
+					<field name="credits" />
+					<field name="course_id" />
+					<field name="standard_id" />
 					<field name="type" />
 				</tree>
 			</field>
@@ -26,9 +27,9 @@
 						<group style="65%%" colspan="4">
 								<field name="name" />
 								<field name="code" />
-								<field name="course_id" required="1" />
-								<field name="credits" required="1" />
-	            				<field name="standard_id" required="1" string="Level"/>
+								<field name="course_id" />
+								<field name="credits" />
+	            				<field name="standard_id" />
 								<field name="type" />
 						</group>
 					</sheet>
@@ -44,13 +45,12 @@
 					<field name="name"
 						filter_domain="['|','|',('name','ilike',self),('code','ilike',self)]" />
 					<field name="code" />
-<!-- 					<field name="course_id" /> -->
-<!-- 					<field name="grade_waitage" /> -->
 					<field name="type" />
 					<newline />
 					<group expand="0" string="Group By...">
-<!-- 						<filter string="Course" domain="[]" context="{'group_by':'course_id'}" /> -->
 						<filter string="Type" domain="[]" context="{'group_by':'type'}" />
+						<filter string="Level" domain="[]" context="{'group_by':'standard_id'}" />
+						<filter string="School" domain="[]" context="{'group_by':'course_id'}" />
 					</group>
 				</search>
 			</field>
