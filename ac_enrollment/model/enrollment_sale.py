@@ -100,6 +100,7 @@ class enrollment_sale(osv.Model):
             default = {}
         default.update({
             'sale_order_id': False,
+            'account_invoice_id': False
         })
         return super(enrollment_sale, self).copy(cr, uid, id, default, context=context)
     
