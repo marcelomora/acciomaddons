@@ -37,12 +37,14 @@ class op_batch(osv.osv):
                 required=True),
             'ex_en_end_date': fields.date('Extraordinary Enrollment End Date',
                 required=True),
-            'or_credit_en_price':fields.float('Ordinary Enrollment Credit Price'),
-            'ex_credit_en_price':fields.float('Extraordinary Enrollment Credit Price'),
-            'or_credit_ta_price':fields.float('Ordinary Tariff Credit Price'),
-            'ex_credit_ta_price':fields.float('Extraordinary Tariff Credit Price'),
-            'second_enrollment_price':fields.float('Second Enrollment Price'),
-            'third_enrollment_price':fields.float('Third Enrollment Price'),
+            #===================================================================
+            # 'or_credit_en_price':fields.float('Ordinary Enrollment Credit Price'),
+            # 'ex_credit_en_price':fields.float('Extraordinary Enrollment Credit Price'),
+            # 'or_credit_ta_price':fields.float('Ordinary Tariff Credit Price'),
+            # 'ex_credit_ta_price':fields.float('Extraordinary Tariff Credit Price'),
+            # 'second_enrollment_price':fields.float('Second Enrollment Price'),
+            # 'third_enrollment_price':fields.float('Third Enrollment Price'),
+            #===================================================================
 
 
     }

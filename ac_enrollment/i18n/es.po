@@ -139,7 +139,7 @@ msgstr "Última Matrícula"
 #. module: ac_enrollment
 #: field:op.batch,ex_en_start_date:0
 msgid "Extraordinary Enrollment Start Date"
-msgstr "Matrícula Extraordinaria Fecha Inicio"
+msgstr "Fecha Inicio Matrícula Extraordinaria"
 
 #. module: ac_enrollment
 #: model:res.groups,name:ac_enrollment.ac_academic_user
@@ -366,8 +366,8 @@ msgstr "Estudiantes"
 
 #. module: ac_enrollment
 #: field:ac_enrollment.sale,state:0
-msgid "unknown"
-msgstr "desconocido"
+msgid "State"
+msgstr "Estado"
 
 #. module: ac_enrollment
 #: field:ac.student,grant_id:0
@@ -411,12 +411,17 @@ msgstr "Período"
 
 #. module: ac_enrollment
 #: view:ac_enrollment.sale:0
+msgid "Show Invoice"
+msgstr "Ver Factura"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
 msgid "Available Subjects "
 msgstr "Materias Disponibles "
 
 #. module: ac_enrollment
 #: view:op.batch:0
-msgid "Extrardinary Enrollment"
+msgid "Extraordinary Enrollment"
 msgstr "Matrícula Extraordinaria"
 
 #. module: ac_enrollment
@@ -558,7 +563,7 @@ msgstr "Estudiante"
 #. module: ac_enrollment
 #: field:op.batch,or_en_end_date:0
 msgid "Ordinary Enrollment End Date"
-msgstr "Fecha Fin Matrícula Extraordinaria"
+msgstr "Fecha Fin Matrícula Ordinaria"
 
 #. module: ac_enrollment
 #: field:op.course,aditional_product_id:0
@@ -648,6 +653,11 @@ msgstr "Costo por matrícula"
 #: field:op.standard,payment_term:0
 msgid "Payment Term"
 msgstr "Términos de Pago"
+
+#. module: ac_enrollment
+#: view:op.subject:0
+msgid "School"
+msgstr "Escuela"
 
 #. module: ac_enrollment
 #: view:op.course:0
