@@ -475,6 +475,8 @@ class enrollment_sale(osv.Model):
                                         help='This field defines the status of the invoice associated'),
         'enrollment_consolidation_ids': fields.one2many('ac.enrollment.consolidation', 'enrollment_consolidation_id', 'Consolidation',
                                                         help=''),
+        'user_id': fields.many2one('res.users', 'Done by', 
+                                   help=''),
     }
 
     _defaults = {
@@ -482,6 +484,7 @@ class enrollment_sale(osv.Model):
         'enrollment_date': fields.date.today(),
         'enrollment_time': 'ordinary',
         'state':'draft',
+        'user_id': lambda self, cr, uid, context: uid
     }
 
     def button_dummy(self, cr, uid, ids, context=None):
