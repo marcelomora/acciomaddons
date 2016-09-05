@@ -565,10 +565,9 @@ class enrollment_sale(osv.Model):
             for key in lines_consolidation_expected.keys():
                 if key not in lines_consolidation_actual.keys():
                     raise osv.except_osv(_('Error'), _('El resumen de la prefactura es diferente al esperado, por favor, presione el boton \'actualizar\''))
-#             for line, value in lines_consolidation_expected.iteritems():
-#                 if not rounding.compare_two_floats(value, lines_consolidation_actual.get(line), False, False, '='):
-#                 #if value != lines_consolidation_actual.get(line):
-#                     raise osv.except_osv(_('Error'), _('El resumen de la prefactura es diferente al esperado, por favor, presione el boton \'actualizar\''))
+            for line, value in lines_consolidation_expected.iteritems():
+                if not rounding.compare_two_floats(value, lines_consolidation_actual.get(line), False, False, '='):
+                    raise osv.except_osv(_('Error'), _('El resumen de la prefactura es diferente al esperado, por favor, presione el boton \'actualizar\''))
             order_id = self._create_sale_order(cr, uid, enrollment)
             self._create_sale_order_line(cr, uid, order_id, enrollment, context=context)
             sale_order_obj = self.pool.get('sale.order')
