@@ -84,7 +84,7 @@ class enrollment_sale(osv.Model):
         #         unlink_ids.append(t['id'])
         # osv.osv.unlink(line_enroll_obj, cr, uid, line_ids, context=context)
         #=======================================================================
-        osv.osv.unlink(self, cr, uid, unlink_ids, context=context)
+        osv.osv.unlink(self, cr, uid, ids, context=context)
         return True
     
     def copy(self, cr, uid, id, default=None, context=None):
