@@ -26,8 +26,11 @@ msgid "Ordinary Tariff Credit Price"
 msgstr "Precio Arancel"
 
 #. module: ac_enrollment
+#: view:ac.student:0
+#: view:ac_enrollment.sale:0
 #: view:op.batch:0
 #: view:op.standard:0
+#: view:op.subject:0
 msgid "Group By..."
 msgstr "Agrupar Por..."
 
@@ -42,6 +45,7 @@ msgid "Taken"
 msgstr "Tomado"
 
 #. module: ac_enrollment
+#: view:ac_enrollment.sale:0
 #: selection:ac_enrollment.sale,enrollment_time:0
 #: selection:ac_enrollment.sale,registration:0
 msgid "Ordinary"
@@ -68,6 +72,7 @@ msgid "Theory"
 msgstr "Teoría"
 
 #. module: ac_enrollment
+#: view:ac_enrollment.sale:0
 #: selection:ac_enrollment.sale,enrollment_time:0
 #: selection:ac_enrollment.sale,registration:0
 msgid "Extraordinary"
@@ -152,6 +157,7 @@ msgid "Banking deposit or payment reference"
 msgstr "Depósito bancario o referencia de pago"
 
 #. module: ac_enrollment
+#: view:ac_enrollment.sale:0
 #: field:ac_enrollment.sale,op_course_id:0
 #: model:ir.actions.act_window,name:ac_enrollment.act_open_op_course_view
 #: model:ir.ui.menu,name:ac_enrollment.menu_op_course
@@ -180,6 +186,7 @@ msgstr "(actualizar)"
 
 #. module: ac_enrollment
 #: field:ac.student,partner_id:0
+#: view:ac_enrollment.sale:0
 #: field:ac_enrollment.sale,partner_id:0
 msgid "Partner"
 msgstr "Facturar a"
@@ -216,6 +223,7 @@ msgid "op.subject"
 msgstr "Materia"
 
 #. module: ac_enrollment
+#: view:op.subject:0
 #: field:op.subject,type:0
 msgid "Type"
 msgstr "Tipo"
@@ -556,6 +564,7 @@ msgstr "Créditos"
 
 #. module: ac_enrollment
 #: view:ac.student:0
+#: view:ac_enrollment.sale:0
 #: field:ac_enrollment.sale,student_id:0
 msgid "Student"
 msgstr "Estudiante"
@@ -680,6 +689,7 @@ msgid "Total"
 msgstr "Total"
 
 #. module: ac_enrollment
+#: view:ac_enrollment.sale:0
 #: field:ac_enrollment.sale,enrollment_time:0
 msgid "Enrollment Time"
 msgstr "Tipo Matrícula"
@@ -723,3 +733,50 @@ msgstr "Detalles de la materia"
 msgid "Enrollment Invoice"
 msgstr "Factura - Matrícula"
 
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+#: selection:ac_enrollment.sale,invoice_state:0
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Confirmed"
+msgstr "Confirmada"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "School Day"
+msgstr "Jornada"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Period"
+msgstr "Período"
+
+#. module: ac_enrollment
+#: view:ac.student:0
+msgid "Country"
+msgstr "País"
+
+#. module: ac_enrollment
+#: view:ac.student:0
+#: field:ac.student,gender:0
+msgid "Gender"
+msgstr "Género"
+
+#. module: ac_enrollment
+#: selection:ac.student,gender:0
+msgid "Male"
+msgstr "Masculino"
+
+#. module: ac_enrollment
+#: selection:ac.student,gender:0
+msgid "Female"
+msgstr "Femenino"
+
+#. module: ac_enrollment
+#: selection:ac.student,gender:0
+#: selection:op.subject,type:0
+msgid "Other"
+msgstr "Otro"
