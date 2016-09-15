@@ -26,8 +26,12 @@ msgid "Ordinary Tariff Credit Price"
 msgstr "Precio Arancel"
 
 #. module: ac_enrollment
+#: view:ac.student:0
+#: view:ac_enrollment.sale:0
+#: view:ac_enrollment.sale_line:0
 #: view:op.batch:0
 #: view:op.standard:0
+#: view:op.subject:0
 msgid "Group By..."
 msgstr "Agrupar Por..."
 
@@ -127,6 +131,7 @@ msgid "Tariff Price"
 msgstr "Precio Arancel"
 
 #. module: ac_enrollment
+#: view:ac_enrollment.sale_line:0
 #: field:ac_enrollment.sale_line,repeat_registration:0
 msgid "Repeated Registration"
 msgstr "Matrícula Repetida"
@@ -317,6 +322,7 @@ msgid "Start Date"
 msgstr "Fecha Inicio"
 
 #. module: ac_enrollment
+#: view:ac_enrollment.sale_line:0
 #: field:ac_enrollment.sale_line,subject_id:0
 #: model:ir.actions.act_window,name:ac_enrollment.act_open_op_subject_view
 #: model:ir.ui.menu,name:ac_enrollment.menu_op_subject
@@ -595,6 +601,7 @@ msgstr "Género"
 #: field:ac.enrollment.consolidation,enrollment_consolidation_id:0
 #: view:ac_enrollment.sale:0
 #: field:ac_enrollment.sale,amount_enrollment:0
+#: view:ac_enrollment.sale_line:0
 #: model:ir.actions.report.xml,name:ac_enrollment.report_enrollment
 #: model:ir.model,name:ac_enrollment.model_ac_enrollment_sale
 #: model:ir.ui.menu,name:ac_enrollment.menu_base_enrollment
@@ -610,8 +617,8 @@ msgstr "Líneas"
 
 #. module: ac_enrollment
 #: field:ac_enrollment.sale_line,enrollment_sale_id:0
-msgid "Sale"
-msgstr "Venta"
+msgid "Enrollment"
+msgstr "Matrícula"
 
 #. module: ac_enrollment
 #: field:ac_enrollment.sale,enrollment_date:0
@@ -666,6 +673,9 @@ msgstr "Detalle de Escuelta / Facultad"
 
 #. module: ac_enrollment
 #: view:ac_enrollment.sale:0
+#: view:ac_enrollment.sale_line:0
+#: model:ir.actions.act_window,name:ac_enrollment.act_open_ac_enrollment_line_view
+#: model:ir.ui.menu,name:ac_enrollment.menu_ac_enrollment_line
 msgid "Enrollment Lines"
 msgstr "Líneas de Matrícula"
 
@@ -701,6 +711,7 @@ msgstr "Producto"
 
 #. module: ac_enrollment
 #: field:ac.enrollment.consolidation,level:0
+#: view:ac_enrollment.sale_line:0
 #: field:ac_enrollment.sale_line,standard_id:0
 #: view:op.subject:0
 msgid "Level"
@@ -723,3 +734,17 @@ msgstr "Detalles de la materia"
 msgid "Enrollment Invoice"
 msgstr "Factura - Matrícula"
 
+#. module: ac_enrollment
+#: selection:ac_enrollment.sale,state:0
+msgid "Cancelled Enrollment"
+msgstr "Matrícula Cancelada"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Send to Draft"
+msgstr "Enviar a borrador"

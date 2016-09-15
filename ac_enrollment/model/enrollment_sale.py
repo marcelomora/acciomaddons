@@ -76,8 +76,9 @@ class enrollment_sale(osv.Model):
         unlink_ids, line_ids = [], []
         line_enroll_obj = self.pool.get('ac_enrollment.sale_line')
         for t in enrollment:
-            if t['state'] not in ('draft', 'cancel'):
-                raise openerp.exceptions.Warning(_('You cannot delete an Enrollment which is not draft or cancelled.'))
+            if t['state'] not in ('draft'):
+                raise osv.except_osv(_(u'¡Error de Usuario!'), 
+                                     _(u'Solamente puede eliminar matrículas en estado borrador.'))
         #=======================================================================
         #     else:
         #         line_ids.extend([line.id for line in self.browse(cr, uid, t['id'], context=context).ac_enrollment_line_ids])
@@ -433,7 +434,8 @@ class enrollment_sale(osv.Model):
             required=True),
         'state':fields.selection([
             ('draft','Draft Enrollment'),
-            ('confirmed', 'Confirmed Enrollment')
+            ('confirmed', 'Confirmed Enrollment'),
+            ('cancel', 'Cancelled Enrollment')
         ], "Estado", help='fields help'),
         'payment_reference':fields.char('Payment Reference', 255,
             help='Banking deposit or payment reference'),
@@ -586,7 +588,40 @@ class enrollment_sale(osv.Model):
             Link to sale order and account invoice
             """
             enrollment.write({'state': 'confirmed', 'sale_order_id': order_id, 'account_invoice_id': invoice_id})
-        return res                    
+        return res
+    
+    def action_enrollment_cancelled(self, cr, uid, ids, context=None):
+        '''
+        
+        :param cr:
+        :param uid:
+        :param ids:
+        :param context:
+        '''
+        if context is None:
+            context = {}
+        for enrollment in self.browse(cr, uid, ids, context=context):
+            if enrollment.sale_order_id and enrollment.sale_order_id.state != 'cancel':
+                raise osv.except_osv(_(u'¡Error de Usuario!'), 
+                                     _(u'Para cancelar la matrícula debe anular el pedido de venta %s.')%(enrollment.sale_order_id.name))
+            if enrollment.account_invoice_id and enrollment.account_invoice_id.state != 'cancel':
+                raise osv.except_osv(_(u'¡Error de Usuario!'), 
+                                     _(u'Para cancelar la matrícula debe anular la factura %s.')%(enrollment.account_invoice_id.internal_number))
+            self.write(cr, uid, ids, {'state': 'cancel'}, context=context)
+        return True
+    
+    def action_enrollment_draft(self, cr, uid, ids, context=None):
+        '''
+        
+        :param cr:
+        :param uid:
+        :param ids:
+        :param context:
+        '''
+        if context is None:
+            context = {}
+        self.write(cr, uid, ids, {'state': 'draft'}, context=context)
+        return True               
 
 class enrollment_sale_line(osv.Model):
     _name = 'ac_enrollment.sale_line'
@@ -613,7 +648,7 @@ class enrollment_sale_line(osv.Model):
         return res
 
     _columns = {
-        'enrollment_sale_id':fields.many2one('ac_enrollment.sale', 'Sale',
+        'enrollment_sale_id':fields.many2one('ac_enrollment.sale', 'Enrollment',
             required=True, readonly=True, ondelete='cascade'),
         'name':fields.char('Description', 255),
         'taken':fields.boolean('Taken'),
@@ -621,7 +656,6 @@ class enrollment_sale_line(osv.Model):
         'credits':fields.float('Credits', readonly=False),
         'enrollment_price':fields.float('Enrollment Price', readonly=False),
         'tariff_price':fields.float('Tariff Price', readonly=False),
-        'op_standard_id': fields.many2one('op.standard', 'Standard',),
         'repeat_registration':fields.selection([
             ('first', 'First'),
             ('second', 'Second'),
