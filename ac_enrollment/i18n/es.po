@@ -29,6 +29,7 @@ msgstr "Precio Arancel"
 #: view:ac.student:0
 #: view:ac_enrollment.sale:0
 #: view:ac_enrollment.sale_line:0
+#: view:ac.student:0
 #: view:op.batch:0
 #: view:op.standard:0
 #: view:op.subject:0
