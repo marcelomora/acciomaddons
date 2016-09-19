@@ -247,6 +247,12 @@ msgid "Draft Enrollment"
 msgstr "Matrícula Borrador"
 
 #. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+#: field:ac_enrollment.sale,state:0
+msgid "State"
+msgstr "Estado"
+
+#. module: ac_enrollment
 #: selection:ac_enrollment.sale_line,repeat_registration:0
 msgid "Second"
 msgstr "Segunda"

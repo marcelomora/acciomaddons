@@ -154,6 +154,7 @@
 						<filter string="Course" context="{'group_by': 'op_course_id'}"/>
         				<filter string="Period" context="{'group_by': 'op_batch_id'}"/>
         				<filter string="Enrollment Time" context="{'group_by': 'enrollment_time'}"/>
+        				<filter string="State" context="{'group_by': 'state'}"/>
 					</group>
 				</search>
 			</field>
