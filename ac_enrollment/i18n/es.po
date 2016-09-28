@@ -755,3 +755,8 @@ msgstr "Cancelar"
 #: view:ac_enrollment.sale:0
 msgid "Send to Draft"
 msgstr "Enviar a borrador"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Print"
+msgstr "Imprimir"
