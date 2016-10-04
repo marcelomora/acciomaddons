@@ -247,8 +247,8 @@ class enrollment_sale(osv.Model):
         op_batch_obj = self.pool.get('op.batch')
         if op_course_id and enrollment_date:
             op_batch_ids = op_batch_obj.search(cr, uid, [('course_id','=',op_course_id),
-                                                         ('or_en_start_date','<=',enrollment_date),
-                                                         ('ex_en_end_date','>=',enrollment_date)], context=context)
+                                                         ('start_date','<=',enrollment_date),
+                                                         ('end_date','>=',enrollment_date)], context=context)
         else:
             if op_course_id:
                 op_batch_ids = op_batch_obj.search(cr, uid, [('course_id','=',op_course_id)], context=context)
