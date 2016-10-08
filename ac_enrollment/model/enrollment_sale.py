@@ -582,8 +582,16 @@ class enrollment_sale(osv.Model):
 #            invoice_line_ids = account_invoice_line_obj.search(cr, uid, [('invoice_id','=',invoice_id)])
 #             #Para cada producto de los 3 productos a facturar les agregamos las materias que le afectan
 #             for line in enrollment.ac_enrollment_line_ids:
-#                 line.write({'invoice_line_ids': [[6, 0, invoice_line_ids]]}) 
-            account_invoice_obj.write(cr, uid, [invoice_id], {'student_id': enrollment.student_id.id, 'enrollment_id': enrollment.id})
+#                 line.write({'invoice_line_ids': [[6, 0, invoice_line_ids]]})
+            #Obtenemos la forma de pago por defecto
+            company = self.pool.get('res.users').browse(cr, uid, uid, context=context).company_id
+            default_payment_id = (enrollment.partner_id.prefer_payment_method and enrollment.partner_id.prefer_payment_method.payment_method_ids and enrollment.partner_id.prefer_payment_method.payment_method_ids[0].id) or (company.prefer_payment_method and company.prefer_payment_method.payment_method_ids and company.prefer_payment_method.payment_method_ids[0].id) or False
+            account_invoice_obj.write(cr, uid, [invoice_id], {
+                'student_id': enrollment.student_id.id, 
+                'enrollment_id': enrollment.id,
+                'account_invoice_payment_method_ids': [(0, False, {'payment_id': default_payment_id})]
+            })
+            account_invoice_obj.button_reset_taxes(cr, uid, [invoice_id], context=context)
             """
             Link to sale order and account invoice
             """
