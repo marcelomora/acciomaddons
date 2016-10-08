@@ -429,8 +429,8 @@ msgstr "Ver Factura"
 
 #. module: ac_enrollment
 #: view:ac_enrollment.sale:0
-msgid "Available Subjects "
-msgstr "Materias Disponibles "
+msgid "Enrollment"
+msgstr "Matrícula"
 
 #. module: ac_enrollment
 #: view:op.batch:0

@@ -100,6 +100,7 @@ class enrollment_sale(osv.Model):
         if not default:
             default = {}
         default.update({
+            'name': '/',
             'sale_order_id': False,
             'account_invoice_id': False
         })
@@ -483,7 +484,7 @@ class enrollment_sale(osv.Model):
     }
 
     _defaults = {
-        'name': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'ac.enrollment'),
+        'name': '/',
         'enrollment_date': fields.date.today(),
         'enrollment_time': 'ordinary',
         'state':'draft',
@@ -592,10 +593,12 @@ class enrollment_sale(osv.Model):
                 'account_invoice_payment_method_ids': [(0, False, {'payment_id': default_payment_id})]
             })
             account_invoice_obj.button_reset_taxes(cr, uid, [invoice_id], context=context)
-            """
-            Link to sale order and account invoice
-            """
-            enrollment.write({'state': 'confirmed', 'sale_order_id': order_id, 'account_invoice_id': invoice_id})
+            #Se consume la secuencia en el proceso de aprobación. Se guarda el id de la orden de venta y factura asociada en la matricula 
+            if enrollment.name == '/':
+                name = self.pool.get('ir.sequence').get(cr, uid, 'ac.enrollment')
+            else:
+                name = enrollment.name
+            enrollment.write({'name': name, 'sale_order_id': order_id, 'account_invoice_id': invoice_id, 'state': 'confirmed'})
         return res
     
     def action_enrollment_cancelled(self, cr, uid, ids, context=None):

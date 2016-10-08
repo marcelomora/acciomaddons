@@ -40,7 +40,7 @@
 					</header>
 					<sheet>
 						<h1>
-							<label string="Available Subjects "
+							<label string="Enrollment"
 								attrs="{'invisible': [('state','not in',('draft','sent'))]}"/>
 							<label string="Enrollment "
 								attrs="{'invisible': [('state','in',('draft','sent'))]}"/>
