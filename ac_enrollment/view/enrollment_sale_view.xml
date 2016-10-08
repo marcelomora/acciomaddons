@@ -12,9 +12,13 @@
 			<field name="model">ac_enrollment.sale</field>
 			<field name="priority" eval="8"/>
 			<field name="arch" type="xml">
-				<tree string="Enrollment">
+				<tree string="Enrollment" colors="blue:state == 'draft';grey:state == 'cancel'">
 					<field name="name"/>
 					<field name="student_id"/>
+					<field name="op_course_id"/>
+					<field name="school_day"/>
+					<field name="enrollment_date"/>
+					<field name="enrollment_time"/>
 					<field name="state"/>
 				</tree>
 			</field>

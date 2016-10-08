@@ -471,7 +471,7 @@ class enrollment_sale(osv.Model):
             help=""""Referenced account invoice to this enrollment"""
             ),
         'school_day':fields.selection([('m','Matutino'),
-            ('e', 'Vespertino')], 'Jordada', required=False,
+            ('e', 'Vespertino')], 'Jornada', required=False,
             help='School day assigned to the student'),
         'invoice_state': fields.related('account_invoice_id', 'state', type='selection',
                                         selection=INVOICE_STATE, string='State', readonly=True,
