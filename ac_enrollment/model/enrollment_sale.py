@@ -513,6 +513,7 @@ class enrollment_sale(osv.Model):
                 enrollment.partner_id.id)['value']
         defaults['partner_id'] = enrollment.partner_id.id
         defaults['enrollment_id'] = enrollment.id
+        defaults['user_id'] = uid
         customer = enrollment.partner_id
         return sale_order_obj.create(cr, uid, defaults)
 
