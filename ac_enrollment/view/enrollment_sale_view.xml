@@ -214,6 +214,7 @@
 			<field name="model">ac_enrollment.sale_line</field>
 			<field name="arch" type="xml">
 				<search string="Search Enrollment">
+					<field name="name"/>
 					<field name="enrollment_sale_id"/>
 					<field name="subject_id"/>
 					<field name="standard_id"/>
