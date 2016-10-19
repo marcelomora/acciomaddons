@@ -147,7 +147,8 @@
 					<filter name="matutino" string="Matutino"
 						domain="[('school_day','=','m')]"/>						
 					<filter name="vespertino" string="Vespertino"
-						domain="[('school_day','=','e')]"/>						
+						domain="[('school_day','=','e')]"/>
+					<field name="name"/>						
 					<field name="school_day"/>
 					<field name="student_id"/>
 					<field name="partner_id"/>
@@ -214,7 +215,6 @@
 			<field name="model">ac_enrollment.sale_line</field>
 			<field name="arch" type="xml">
 				<search string="Search Enrollment">
-					<field name="name"/>
 					<field name="enrollment_sale_id"/>
 					<field name="subject_id"/>
 					<field name="standard_id"/>
