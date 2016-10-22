@@ -110,19 +110,19 @@ class Parser(report_sxw.rml_parse):
                     if not nro_invoice:
                         nro_invoice += enrollment.account_invoice_id.internal_number
                     else:
-                        nro_invoice += ', ' + enrollment.account_invoice_id.internal_number
+                        nro_invoice += '\n' + enrollment.account_invoice_id.internal_number
                 #Números de matrícula
                 if enrollment.name:
                     if not nro_enrollment:
                         nro_enrollment += enrollment.name
                     else:
-                        nro_enrollment += ', ' + enrollment.name
+                        nro_enrollment += '\n' + enrollment.name
                 #Fechas de matrícula
                 if enrollment.enrollment_date:
                     if not date_enrollment:
                         date_enrollment += enrollment.enrollment_date
                     else:
-                        date_enrollment += ', ' + enrollment.enrollment_date               
+                        date_enrollment += '\n' + enrollment.enrollment_date               
                 #Niveles    
                 for level in enrollment.op_standard_ids:
                     if level.name not in list_levels:
@@ -140,19 +140,19 @@ class Parser(report_sxw.rml_parse):
                 if not levels:
                     levels += level
                 else:
-                    levels += ', ' + level
+                    levels += '\n' + level
             #Convetir las jornadas a texto
             for day in list_school_day:
                 if not school_day:
                     school_day += get_name_school_day(self, cr, uid, day, context=context)
                 else:
-                    school_day += ', ' + get_name_school_day(self, cr, uid, day, context=context)
+                    school_day += '\n' + get_name_school_day(self, cr, uid, day, context=context)
             #Convetir las matrículas a texto              
             for repeat in list_repeat_registration:
                 if not enrollments:
                     enrollments += get_name_repeat_registration(self, cr, uid, repeat, context=context)
                 else:
-                    enrollments += ', ' + get_name_repeat_registration(self, cr, uid, repeat, context=context)         
+                    enrollments += '\n' + get_name_repeat_registration(self, cr, uid, repeat, context=context)         
             vals.update({
                 'nro_invoice': nro_invoice,
                 'birth_date': birth_date,

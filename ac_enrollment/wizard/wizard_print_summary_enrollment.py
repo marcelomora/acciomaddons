@@ -21,6 +21,7 @@
 
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
+import time
 
 
 class wizard_print_summary_enrollment(osv.osv_memory):
@@ -45,7 +46,12 @@ class wizard_print_summary_enrollment(osv.osv_memory):
 
     _columns = {
         'period_id': fields.many2one('op.batch', 'Period', 
-                                     help='This field defines the period to be analyzed in the report')
+                                     help='This field defines the period to be analyzed in the report'),
+        'date': fields.date('Date', help='This field will be used to print the report date')
+    }
+    
+    _defaults = {
+        'date': lambda *a: time.strftime('%Y-%m-%d')
     }
 
 wizard_print_summary_enrollment()

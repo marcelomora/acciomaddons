@@ -9,6 +9,7 @@
 	            <form string="Summary Enrollment" version="7.0">
 	                <group>
 	                    <field name="period_id" required="1"/>
+	                    <field name="date" invisible="1"/>
 	                </group>
 	                <footer>
 	                    <button name="print_report" string="Print" type="object" class="oe_highlight"/> or
