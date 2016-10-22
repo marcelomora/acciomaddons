@@ -44,7 +44,8 @@ Management of enrollment for student at an educational institute.
         'view/invoice_view.xml',
         'security/groups.xml',
         'security/ir.model.access.csv',
-        'report/report_data.xml'
+        'report/report_data.xml',
+        'wizard/wizard_print_summary_enrollment.xml'
     ],
     'js': [
     ],

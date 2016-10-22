@@ -243,6 +243,9 @@
 		<menuitem action="act_open_ac_enrollment_line_view" id="menu_ac_enrollment_line"
 			parent="ac_enrollment.menu_enrollment" sequence="21"
 			groups="base.group_sale_salesman,base.group_sale_manager"/>
+			
+		<menuitem id="menu_report" name="Reports"
+			parent="ac_enrollment.menu_base_enrollment" sequence="10"/>
 
 	</data>
 </openerp>

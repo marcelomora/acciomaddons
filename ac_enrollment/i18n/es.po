@@ -760,3 +760,39 @@ msgstr "Enviar a borrador"
 #: view:ac_enrollment.sale:0
 msgid "Print"
 msgstr "Imprimir"
+
+#. module: ac_enrollment
+#: model:ir.ui.menu,name:ac_enrollment.menu_report
+msgid "Reports"
+msgstr "Reportes"
+
+#. module: ac_enrollment
+#: model:ir.actions.act_window,name:ac_enrollment.action_print_summary_enrollment
+#: model:ir.actions.report.xml,name:ac_enrollment.report_summary_enrollment
+#: model:ir.ui.menu,name:ac_enrollment.menu_print_summary_enrollment
+#: view:wizard.print.summary.enrollment:0
+msgid "Summary Enrollment"
+msgstr "RAUL COKA BARRIGA"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+#: field:wizard.print.summary.enrollment,period_id:0
+msgid "Period"
+msgstr "Período"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+#: view:wizard.print.summary.enrollment:0
+msgid "Print"
+msgstr "Imprimir"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+#: view:wizard.print.summary.enrollment:0
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: ac_enrollment
+#: help:wizard.print.summary.enrollment,period_id:0
+msgid "This field defines the period to be analyzed in the report"
+msgstr "Este campo define el período que va ser analizado en el reporte"
