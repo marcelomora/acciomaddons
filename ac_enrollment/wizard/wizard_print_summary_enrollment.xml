@@ -7,6 +7,14 @@
             <field name="model">wizard.print.summary.enrollment</field>
             <field name="arch" type="xml">
 	            <form string="Summary Enrollment" version="7.0">
+	            	<div> 
+                		<p align="justify">
+	                 		<h1 style="color:blue">¡Adventencia!</h1>		                 		
+	                    </p>
+                		<p align="justify">
+	                 		Tenga presente que las matrículas en borrador y anuladas no se van a incluir en el reporte.		                 		
+	                    </p> 	                                                               
+                    </div>
 	                <group>
 	                    <field name="period_id" required="1"/>
 	                    <field name="date" invisible="1"/>

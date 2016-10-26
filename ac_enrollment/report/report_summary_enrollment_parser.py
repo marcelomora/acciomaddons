@@ -173,12 +173,12 @@ class Parser(report_sxw.rml_parse):
         student_ids = []
         summary.setdefault(period.code, [])
         enrollment_obj = self.pool.get('ac_enrollment.sale')     
-        enrollment_tmp_ids = enrollment_obj.search(cr, uid, [('op_batch_id','=',period.id)], context=context)
+        enrollment_tmp_ids = enrollment_obj.search(cr, uid, [('op_batch_id','=',period.id), ('state','=','confirmed')], context=context)
         for enrollment in enrollment_obj.browse(cr, uid, enrollment_tmp_ids, context=context):
             if enrollment.student_id.id not in student_ids:
               student_ids.append(enrollment.student_id.id)
         for student_id in student_ids:
-            enrollment_ids = enrollment_obj.search(cr, uid, [('op_batch_id','=',period.id), ('student_id','=',student_id)], context=context)
+            enrollment_ids = enrollment_obj.search(cr, uid, [('op_batch_id','=',period.id), ('student_id','=',student_id), ('state','=','confirmed')], context=context)
             vals = line(self, cr, uid, enrollment_ids, context=context)
             summary[period.code].append(vals)
         return summary
