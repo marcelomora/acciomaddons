@@ -34,7 +34,7 @@ Management of enrollment for student at an educational institute.
         'base', 
         'sale', 
         'account',
-        'onject_merger',
+        'object_merger',
     ],
     'data': [
         'data/ac_enrollment_sequence.xml',
