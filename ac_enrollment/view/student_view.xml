@@ -223,6 +223,22 @@
 		<menuitem action="act_open_ac_student_view" id="menu_ac_student"
 			parent="ac_enrollment.menu_enrollment" sequence="6"
 			groups="base.group_sale_salesman,base.group_sale_manager" />
+			
+		<record id="student_merge_action" model="ir.actions.server">
+	        <field name="name">Student Merge</field>
+	        <field name="model_id" ref="model_ac_student"/>
+	        <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+	        <field name="condition">True</field>
+	        <field name="code">self.correct_res_partner(cr,uid,context.get('active_ids', []), context)</field>
+		</record>
+		<record id="student_merge_action_client" model="ir.values">
+	        <field name="name">Reprocess Account Move</field>
+	        <field name="model">ac.student</field>
+	        <field name="key" >action</field>
+	        <field name="key2">client_action_multi</field>
+	        <field name="value" eval="'ir.actions.server,%d'%student_merge_action"/>
+		</record>
 	</data>
 </openerp>
 
