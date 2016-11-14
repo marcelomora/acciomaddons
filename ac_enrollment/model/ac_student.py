@@ -22,6 +22,7 @@ import time
 import re #para busqueda por cedula
 
 from osv import osv, fields
+from openerp.tools.translate import _
 
 
 class ac_student(osv.osv):
@@ -31,15 +32,65 @@ class ac_student(osv.osv):
     def create(self, cr, uid, data, context=None):
         context = context or {}
         existent_partner = []
+        partner_obj = self.pool.get('res.partner')
         if 'vat' in data:
-            existent_partner = self.pool.get('res.partner').search(cr, uid, [('vat', '=', data.get('vat'))])
+            existent_partner = partner_obj.search(cr, uid, [('vat', '=', data.get('vat'))])
             if existent_partner:
+                if self.search(cr, uid, [('partner_id', 'in', existent_partner)]):
+                    raise osv.except_osv(_('Error!'), _('El estudiante ya existe'))
                 data.update(partner_id=existent_partner[0])
                 self.pool.get('res.partner').action_open(cr, uid, existent_partner, context=context)
+                data.pop('name')
         result = super(ac_student, self).create(cr, uid, data, context=context)
         self.pool.get('res.partner').action_lock(cr, uid, existent_partner, context=context)
         return  result
     
+    def correct_res_partner(self, cr, uid, ids, context=None):
+        """
+        Corrige los estudiantes repetidos y los partner asociados.
+        """
+        context = context or {}
+        ctxt_om = {'active_model': 'ac.student', 'field_to_read': 'to_preserve',
+                   'to_invoke': True}
+        student_id_repeated, id_repeated = [], []
+        repeated_partner, repeated_student = [], []
+        id_repeat, student_repeat = False, False
+        cr.execute("""select vat
+                        from ac_student left join res_partner on
+                        partner_id = res_partner.id 
+                        group by vat
+                        having count(vat) > 1""")
+        res = cr.fetchall()
+        student_repeated = [id[0] for id in res]
+        for student_vat in student_repeated:
+            student_repeated = self.search(cr, uid, [('partner_id.vat','=', student_vat)])
+            student_repeat = student_repeated[0]
+            if len(student_repeated)>1:
+                ctxt_om.update(active_ids=student_repeated, 
+                               object_to_preserve_id=student_repeated[0])
+                self.pool.get('object.merger').action_merge(cr, uid, ids, context=ctxt_om)
+                student_repeated.remove(student_repeat)
+                repeated_student.extend(student_repeated)
+        self.unlink(cr, uid, repeated_student)
+        ctxt_om.update(active_model = 'res.partner')
+        partner_obj = self.pool.get('res.partner')
+        cr.execute("""select vat from res_partner
+                        group by vat having count(vat) > 1
+                        order by count(vat),vat""")
+        res = cr.fetchall()
+        vat_repeated = [id[0] for id in res]
+        for vat in vat_repeated:
+            id_repeated = partner_obj.search(cr, uid, [('vat','=', vat),'|',
+                                                       ('active','=',True),('active','=',False)])
+            if len(id_repeated)>1:
+                id_repeat = [partner_id.id for partner_id in partner_obj.browse(cr,uid,id_repeated) if partner_id.active][0]
+                ctxt_om.update(active_ids=id_repeated, object_to_preserve_id=id_repeat)
+                self.pool.get('object.merger').action_merge(cr, uid, ids, context=ctxt_om)
+                id_repeated.remove(id_repeat)
+                repeated_partner.extend(id_repeated)
+        partner_obj.unlink(cr, uid, repeated_partner)
+        return True
+        
     def name_get(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
