@@ -31,7 +31,10 @@ Management of enrollment for student at an educational institute.
     'website': 'http://www.accioma.com',
     'images' : [],
     'depends' : [
-        'base', 'sale', 'account'
+        'base', 
+        'sale', 
+        'account',
+        'onject_merger',
     ],
     'data': [
         'data/ac_enrollment_sequence.xml',
