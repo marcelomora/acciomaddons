@@ -544,6 +544,7 @@ class enrollment_sale(osv.Model):
                 'price_unit': line.amount,
                 'account_analytic_id': line.account_analytic_id.id,
                 'order_id': sale_order.id, 
+                'tax_id': [[6, False, defaults.get('tax_id')]]
             })
             order_line_id = sale_order_line.create(cr, uid, defaults, context=context)
             invoice_line_ids.append(order_line_id)              
