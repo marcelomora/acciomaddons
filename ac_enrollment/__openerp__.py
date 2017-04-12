@@ -31,18 +31,24 @@ Management of enrollment for student at an educational institute.
     'website': 'http://www.accioma.com',
     'images' : [],
     'depends' : [
-        'base', 'sale', 'account'
+        'base', 
+        'sale', 
+        'account',
+        'object_merger',
     ],
     'data': [
         'data/ac_enrollment_sequence.xml',
         'op_course/op_course_view.xml',
         'op_standard/op_standard_view.xml',
         'op_batch/op_batch_view.xml',
+        'op_subject/op_subject_view.xml',
         'view/enrollment_sale_view.xml',
         'view/student_view.xml',
         'view/invoice_view.xml',
         'security/groups.xml',
         'security/ir.model.access.csv',
+        'report/report_data.xml',
+        'wizard/wizard_print_summary_enrollment.xml'
     ],
     'js': [
     ],
@@ -57,5 +63,3 @@ Management of enrollment for student at an educational institute.
     'installable': True,
     'auto_install': False,
 }
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-

@@ -30,8 +30,9 @@
 							<field name="sequence" />
 							<!--<field name="payment_term" />-->
 							<field name="property_product_pricelist" />
-							<field name="extra_property_product_pricelist" />
-							<separator string="Students" colspan="4" />
+							<field name="extra_property_product_pricelist"/>
+							<field name="account_analytic_id"/>
+							<!--separator string="Students" colspan="4" /-->
               <!-- <field name="student_ids" colspan="4" nolabel="1" > 
 									<tree>
 										<field name="title" />
@@ -59,7 +60,8 @@
 			<field name="arch" type="xml">
 				<search string="Standard">
 					<field name="code" />
-					<field name="name" />
+					<field name="name" 
+						filter_domain="['|','|',('name','ilike',self),('code','ilike',self)]" />
 					<newline />
 					<group expand="0" string="Group By...">
 					</group>

@@ -31,8 +31,8 @@ class op_subject(osv.osv):
             'type': fields.selection([('p','Practial'),('t','Theory'),('pt','Both'),('o','Other')], string='Type', required=True),
             'credits':fields.float('Credits', help='Number of credits by subject'),
             'standard_id': fields.many2one('op.standard', 'Standard', ),
-
     }
+
 
 op_subject()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

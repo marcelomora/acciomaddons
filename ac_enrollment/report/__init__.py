@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (c) 2016 TRESCLOUD Cia Ltda (trescloud.com)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,13 +18,5 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields, osv
 
-class Invoice(osv.osv):
-    _inherit = 'account.invoice'
-    _description = 'Invoice'
-    
-    _columns = {
-    	'enrollment_id': fields.many2one('ac_enrollment.sale', u'Matrícula', ),
-        'student_id': fields.many2one('ac.student', 'Estudiante', ),
-    }
+import report_enrollment_invoice_parser

@@ -26,8 +26,13 @@ msgid "Ordinary Tariff Credit Price"
 msgstr "Precio Arancel"
 
 #. module: ac_enrollment
+#: view:ac.student:0
+#: view:ac_enrollment.sale:0
+#: view:ac_enrollment.sale_line:0
+#: view:ac.student:0
 #: view:op.batch:0
 #: view:op.standard:0
+#: view:op.subject:0
 msgid "Group By..."
 msgstr "Agrupar Por..."
 
@@ -74,7 +79,7 @@ msgid "Extraordinary"
 msgstr "Extraordinario"
 
 #. module: ac_enrollment
-#: field:ac_enrollment.sale,op_standard_id:0
+#: field:ac_enrollment.sale,op_standard_ids:0
 #: model:ir.actions.act_window,name:ac_enrollment.act_open_op_standard_view
 #: model:ir.ui.menu,name:ac_enrollment.menu_op_standard
 #: view:op.standard:0
@@ -117,6 +122,7 @@ msgstr "Período"
 
 #. module: ac_enrollment
 #: field:ac_enrollment.sale_line,amount:0
+#: field:ac.enrollment.consolidation,amount:0
 msgid "Amount"
 msgstr "Monto"
 
@@ -126,6 +132,7 @@ msgid "Tariff Price"
 msgstr "Precio Arancel"
 
 #. module: ac_enrollment
+#: view:ac_enrollment.sale_line:0
 #: field:ac_enrollment.sale_line,repeat_registration:0
 msgid "Repeated Registration"
 msgstr "Matrícula Repetida"
@@ -138,7 +145,7 @@ msgstr "Última Matrícula"
 #. module: ac_enrollment
 #: field:op.batch,ex_en_start_date:0
 msgid "Extraordinary Enrollment Start Date"
-msgstr "Matrícula Extraordinaria Fecha Inicio"
+msgstr "Fecha Inicio Matrícula Extraordinaria"
 
 #. module: ac_enrollment
 #: model:res.groups,name:ac_enrollment.ac_academic_user
@@ -181,7 +188,7 @@ msgstr "(actualizar)"
 #: field:ac.student,partner_id:0
 #: field:ac_enrollment.sale,partner_id:0
 msgid "Partner"
-msgstr "Tercero"
+msgstr "Facturar a"
 
 #. module: ac_enrollment
 #: view:ac_enrollment.sale:0
@@ -240,9 +247,15 @@ msgid "Draft Enrollment"
 msgstr "Matrícula Borrador"
 
 #. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+#: field:ac_enrollment.sale,state:0
+msgid "State"
+msgstr "Estado"
+
+#. module: ac_enrollment
 #: selection:ac_enrollment.sale_line,repeat_registration:0
-msgid "Second Registration"
-msgstr "Segunda Matrícula"
+msgid "Second"
+msgstr "Segunda"
 
 #. module: ac_enrollment
 #: model:ir.ui.menu,name:ac_enrollment.menu_configuration
@@ -316,7 +329,11 @@ msgid "Start Date"
 msgstr "Fecha Inicio"
 
 #. module: ac_enrollment
+#: view:ac_enrollment.sale_line:0
 #: field:ac_enrollment.sale_line,subject_id:0
+#: model:ir.actions.act_window,name:ac_enrollment.act_open_op_subject_view
+#: model:ir.ui.menu,name:ac_enrollment.menu_op_subject
+#: view:op.subject:0
 msgid "Subject"
 msgstr "Materia"
 
@@ -362,8 +379,8 @@ msgstr "Estudiantes"
 
 #. module: ac_enrollment
 #: field:ac_enrollment.sale,state:0
-msgid "unknown"
-msgstr "desconocido"
+msgid "State"
+msgstr "Estado"
 
 #. module: ac_enrollment
 #: field:ac.student,grant_id:0
@@ -407,12 +424,17 @@ msgstr "Período"
 
 #. module: ac_enrollment
 #: view:ac_enrollment.sale:0
-msgid "Available Subjects "
-msgstr "Materias Disponibles "
+msgid "Show Invoice"
+msgstr "Ver Factura"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Enrollment"
+msgstr "Matrícula"
 
 #. module: ac_enrollment
 #: view:op.batch:0
-msgid "Extrardinary Enrollment"
+msgid "Extraordinary Enrollment"
 msgstr "Matrícula Extraordinaria"
 
 #. module: ac_enrollment
@@ -480,8 +502,8 @@ msgstr "Fecha de Nacimiento"
 
 #. module: ac_enrollment
 #: selection:ac_enrollment.sale_line,repeat_registration:0
-msgid "Third Registration"
-msgstr "Tercera Matrícula"
+msgid "Third"
+msgstr "Tercera"
 
 #. module: ac_enrollment
 #: field:ac_enrollment.sale,amount_additional:0
@@ -554,7 +576,7 @@ msgstr "Estudiante"
 #. module: ac_enrollment
 #: field:op.batch,or_en_end_date:0
 msgid "Ordinary Enrollment End Date"
-msgstr "Fecha Fin Matrícula Extraordinaria"
+msgstr "Fecha Fin Matrícula Ordinaria"
 
 #. module: ac_enrollment
 #: field:op.course,aditional_product_id:0
@@ -563,8 +585,8 @@ msgstr "Producto Adicional"
 
 #. module: ac_enrollment
 #: selection:ac_enrollment.sale_line,repeat_registration:0
-msgid "First Registration"
-msgstr "Primera Matrícula"
+msgid "First"
+msgstr "Primera"
 
 #. module: ac_enrollment
 #: field:ac.grant,name:0
@@ -583,12 +605,15 @@ msgid "Gender"
 msgstr "Género"
 
 #. module: ac_enrollment
-#: view:ac.student:0
+#: field:ac.enrollment.consolidation,enrollment_consolidation_id:0
 #: view:ac_enrollment.sale:0
 #: field:ac_enrollment.sale,amount_enrollment:0
+#: view:ac_enrollment.sale_line:0
+#: model:ir.actions.report.xml,name:ac_enrollment.report_enrollment
 #: model:ir.model,name:ac_enrollment.model_ac_enrollment_sale
 #: model:ir.ui.menu,name:ac_enrollment.menu_base_enrollment
 #: model:ir.ui.menu,name:ac_enrollment.menu_enrollment
+#: field:sale.order,enrollment_id:0
 msgid "Enrollment"
 msgstr "Matrícula"
 
@@ -599,8 +624,8 @@ msgstr "Líneas"
 
 #. module: ac_enrollment
 #: field:ac_enrollment.sale_line,enrollment_sale_id:0
-msgid "Sale"
-msgstr "Venta"
+msgid "Enrollment"
+msgstr "Matrícula"
 
 #. module: ac_enrollment
 #: field:ac_enrollment.sale,enrollment_date:0
@@ -644,12 +669,20 @@ msgid "Payment Term"
 msgstr "Términos de Pago"
 
 #. module: ac_enrollment
+#: view:op.subject:0
+msgid "School"
+msgstr "Escuela"
+
+#. module: ac_enrollment
 #: view:op.course:0
 msgid "Course Detail"
 msgstr "Detalle de Escuelta / Facultad"
 
 #. module: ac_enrollment
 #: view:ac_enrollment.sale:0
+#: view:ac_enrollment.sale_line:0
+#: model:ir.actions.act_window,name:ac_enrollment.act_open_ac_enrollment_line_view
+#: model:ir.ui.menu,name:ac_enrollment.menu_ac_enrollment_line
 msgid "Enrollment Lines"
 msgstr "Líneas de Matrícula"
 
@@ -666,10 +699,100 @@ msgstr "Total"
 #. module: ac_enrollment
 #: field:ac_enrollment.sale,enrollment_time:0
 msgid "Enrollment Time"
-msgstr "Hora Matrícula"
+msgstr "Tipo Matrícula"
 
 #. module: ac_enrollment
 #: model:ir.model,name:ac_enrollment.model_op_division
 msgid "op.division"
 msgstr "Paralelo"
 
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Summary for Invoice"
+msgstr "Resumen para factura"
+
+#. module: ac_enrollment
+#: field:ac.enrollment.consolidation,product_id:0
+msgid "Product"
+msgstr "Producto"
+
+#. module: ac_enrollment
+#: field:ac.enrollment.consolidation,level:0
+#: view:ac_enrollment.sale_line:0
+#: field:ac_enrollment.sale_line,standard_id:0
+#: view:op.subject:0
+msgid "Level"
+msgstr "Nivel"
+
+#. module: ac_enrollment
+#: field:ac.enrollment.consolidation,account_analytic_id:0
+#: field:op.standard,account_analytic_id:0
+#: field:sale.order.line,account_analytic_id:0
+msgid "Analytic Account"
+msgstr "Centro de costo"
+
+#. module: ac_enrollment
+#: view:op.subject:0
+msgid "Subject Details"
+msgstr "Detalles de la materia"
+
+#. module: ac_enrollment
+#: model:ir.actions.report.xml,name:ac_enrollment.report_enrollment_invoice
+msgid "Enrollment Invoice"
+msgstr "Factura - Matrícula"
+
+#. module: ac_enrollment
+#: selection:ac_enrollment.sale,state:0
+msgid "Cancelled Enrollment"
+msgstr "Matrícula Cancelada"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Send to Draft"
+msgstr "Enviar a borrador"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+msgid "Print"
+msgstr "Imprimir"
+
+#. module: ac_enrollment
+#: model:ir.ui.menu,name:ac_enrollment.menu_report
+msgid "Reports"
+msgstr "Reportes"
+
+#. module: ac_enrollment
+#: model:ir.actions.act_window,name:ac_enrollment.action_print_summary_enrollment
+#: model:ir.actions.report.xml,name:ac_enrollment.report_summary_enrollment
+#: model:ir.ui.menu,name:ac_enrollment.menu_print_summary_enrollment
+#: view:wizard.print.summary.enrollment:0
+msgid "Summary Enrollment"
+msgstr "RAUL COKA BARRIGA"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+#: field:wizard.print.summary.enrollment,period_id:0
+msgid "Period"
+msgstr "Período"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+#: view:wizard.print.summary.enrollment:0
+msgid "Print"
+msgstr "Imprimir"
+
+#. module: ac_enrollment
+#: view:ac_enrollment.sale:0
+#: view:wizard.print.summary.enrollment:0
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: ac_enrollment
+#: help:wizard.print.summary.enrollment,period_id:0
+msgid "This field defines the period to be analyzed in the report"
+msgstr "Este campo define el período que va ser analizado en el reporte"

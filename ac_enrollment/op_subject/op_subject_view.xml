@@ -7,10 +7,11 @@
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<tree string="Subject">
-					<field name="name" />
 					<field name="code" />
-<!-- 					<field name="course_id" /> -->
-<!-- 					<field name="grade_waitage" /> -->
+					<field name="name" />
+					<field name="credits" />
+					<field name="course_id" />
+					<field name="standard_id" />
 					<field name="type" />
 				</tree>
 			</field>
@@ -23,12 +24,13 @@
 				<form string="Subject" version="7.0">
 					<sheet>
 						<separator colspan="4" string="Subject Details" />
-						<group colspan="4">
-							<field name="name" />
-							<field name="code" />
-<!-- 							<field name="course_id" /> -->
-<!-- 							<field name="grade_waitage" /> -->
-							<field name="type" />
+						<group style="65%%" colspan="4">
+								<field name="name" />
+								<field name="code" />
+								<field name="course_id" />
+								<field name="credits" />
+	            				<field name="standard_id" />
+								<field name="type" />
 						</group>
 					</sheet>
 				</form>
@@ -40,15 +42,15 @@
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<search string="Subject">
-					<field name="name" />
+					<field name="name"
+						filter_domain="['|','|',('name','ilike',self),('code','ilike',self)]" />
 					<field name="code" />
-<!-- 					<field name="course_id" /> -->
-<!-- 					<field name="grade_waitage" /> -->
 					<field name="type" />
 					<newline />
 					<group expand="0" string="Group By...">
-<!-- 						<filter string="Course" domain="[]" context="{'group_by':'course_id'}" /> -->
 						<filter string="Type" domain="[]" context="{'group_by':'type'}" />
+						<filter string="Level" domain="[]" context="{'group_by':'standard_id'}" />
+						<filter string="School" domain="[]" context="{'group_by':'course_id'}" />
 					</group>
 				</search>
 			</field>
@@ -75,5 +77,10 @@
 			<field name="view_mode">tree</field>
 			<field name="view_id" ref="view_op_subject_tree" />
 		</record>
+		
+		<!-- MenuItems -->
+		<menuitem action="act_open_op_subject_view" id="menu_op_subject"
+			parent="menu_configuration" sequence="20"
+			groups="base.group_sale_salesman,base.group_sale_manager" />
 	</data>
 </openerp>
