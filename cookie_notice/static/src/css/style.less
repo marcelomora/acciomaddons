@@ -1,0 +1,31 @@
+@bar_bg: rgb(51,51,51);
+@bar_primary: rgb(26,213,108);
+@bar_text: rgba(255,255,255,0.75);
+@bar_link: rgb(255,255,255);
+
+@modal_overlay: rgba(0,0,0,0.4);
+@modal_bg: rgb(255,255,255);
+@modal_footer: rgb(244,245,247);
+@modal_title: rgba(0,0,0,0.8);
+@modal_text: rgba(0,0,0,0.5);
+@modal_icon: rgb(189,189,189);
+@modal_primary: rgb(26,213,108);
+
+
+.gdpr-cookie-notice {
+  position: fixed;
+  background: @bar_bg;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+// transition: all ease 1s;
+// transform: translateY(100%);
+  z-index: 1000;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}

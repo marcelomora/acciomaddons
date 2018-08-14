@@ -1,0 +1,18 @@
+<odoo>
+    <template id="cookie_notice" inherit_id="website.layout">
+        <xpath expr="//header" position="after">
+            <div class="gdpr-cookie-notice">
+                <div style="width: 80%; float: left;">Usamos cookies para ofrecer una mejor experiencia de navegación,
+                    personalización de contenido y anuncios, agregar características de 
+                    redes sociales y analizar nuestro tráfico. 
+                    Puede obtener mayor información sobre la forma en la que usamos las cookies 
+                    y cómo puede controlarlas al hacer click en el botón Más información. 
+                    Usted expresa su consentimiento de utilización de cookies al 
+                    continuar usando nuestro sitio.</div>
+                    <div><a href="#" class="btn btn-info">Más Información</a>
+                        <a href="#" class="btn btn-success">Aceptar</a>
+                    </div>
+                </div>
+        </xpath>
+    </template>
+</odoo>
